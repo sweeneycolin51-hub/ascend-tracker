@@ -230,88 +230,75 @@ textarea.checkin-input{resize:vertical;min-height:80px;}
       <div class="body-svg-wrap">
         <div class="body-svg-label">Front</div>
         <div class="body-svg-container">
-          <svg viewBox="0 0 100 290" xmlns="http://www.w3.org/2000/svg">
-            <!-- Head — small and lean -->
-            <ellipse cx="50" cy="16" rx="11" ry="13" fill="#161616" stroke="#2a2a2a" stroke-width="0.7"/>
-            <!-- Neck — narrow -->
-            <rect x="45" y="28" width="10" height="10" rx="3" fill="#141414" stroke="#222" stroke-width="0.6"/>
-            <!-- Neck muscles -->
-            <path d="M45,29 Q42,34 43,38" class="mg" id="mf-neck" fill="none" stroke="#1e1e1e" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M55,29 Q58,34 57,38" class="mg" id="mf-neck2" fill="none" stroke="#1e1e1e" stroke-width="2.5" stroke-linecap="round"/>
-
-            <!-- TORSO — wide at shoulders, very narrow at waist (V-taper) -->
-            <!-- Trapezoidal torso base -->
-            <path d="M28,38 Q18,42 16,56 Q15,70 18,82 Q22,92 28,98 Q36,104 50,105 Q64,104 72,98 Q78,92 82,82 Q85,70 84,56 Q82,42 72,38 Z" fill="#111" stroke="#1c1c1c" stroke-width="0.6"/>
-
-            <!-- CHEST LEFT — pec with upper/lower division, lean not boxy -->
-            <path d="M30,45 Q33,41 43,43 Q50,45 49,54 Q48,61 43,63 Q37,63 32,58 Q28,53 30,45 Z" class="mg" id="mf-chest-l" fill="#191919" stroke="#2a2a2a" stroke-width="0.7"/>
-            <!-- upper chest detail line -->
-            <path d="M31,47 Q42,43 49,47" fill="none" stroke="#222" stroke-width="1" stroke-linecap="round"/>
-
+          <svg viewBox="0 0 100 280" xmlns="http://www.w3.org/2000/svg">
+            <!-- HEAD -->
+            <ellipse cx="50" cy="13" rx="10" ry="12" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="0.7"/>
+            <!-- NECK -->
+            <path d="M44,24 Q44,34 46,36 Q50,37 54,36 Q56,34 56,24 Q50,22 44,24 Z" fill="#151515" stroke="#222" stroke-width="0.6"/>
+            <!-- SCM neck muscles -->
+            <path d="M45,25 Q42,31 43,36" class="mg" id="mf-neck" fill="none" stroke="#222" stroke-width="2.8" stroke-linecap="round"/>
+            <path d="M55,25 Q58,31 57,36" class="mg" id="mf-neck2" fill="none" stroke="#222" stroke-width="2.8" stroke-linecap="round"/>
+            <!-- TORSO SILHOUETTE — wide shoulders, narrow waist -->
+            <path d="M24,35 Q8,40 7,56 Q6,72 10,86 Q15,98 24,106 Q35,113 50,114 Q65,113 76,106 Q85,98 90,86 Q94,72 93,56 Q92,40 76,35 Z" fill="#0f0f0f" stroke="#1a1a1a" stroke-width="0.5"/>
+            <!-- SHOULDERS — large round deltoid caps -->
+            <path d="M7,40 Q6,33 13,33 Q22,34 26,43 Q28,52 23,59 Q17,63 11,59 Q5,53 7,40 Z" class="mg" id="mf-shoulder-l" fill="#1e1e1e" stroke="#2d2d2d" stroke-width="0.9"/>
+            <path d="M93,40 Q94,33 87,33 Q78,34 74,43 Q72,52 77,59 Q83,63 89,59 Q95,53 93,40 Z" class="mg" id="mf-shoulder-r" fill="#1e1e1e" stroke="#2d2d2d" stroke-width="0.9"/>
+            <!-- CHEST LEFT — large fan-shape pec -->
+            <path d="M24,44 Q25,37 37,39 Q48,41 50,52 Q50,63 44,68 Q36,70 29,63 Q22,56 24,44 Z" class="mg" id="mf-chest-l" fill="#1c1c1c" stroke="#2b2b2b" stroke-width="0.9"/>
+            <path d="M26,48 Q37,42 50,47" fill="none" stroke="#252525" stroke-width="0.8" stroke-linecap="round"/>
+            <path d="M25,56 Q37,52 50,56" fill="none" stroke="#212121" stroke-width="0.6" stroke-linecap="round"/>
             <!-- CHEST RIGHT -->
-            <path d="M70,45 Q67,41 57,43 Q50,45 51,54 Q52,61 57,63 Q63,63 68,58 Q72,53 70,45 Z" class="mg" id="mf-chest-r" fill="#191919" stroke="#2a2a2a" stroke-width="0.7"/>
-            <path d="M69,47 Q58,43 51,47" fill="none" stroke="#222" stroke-width="1" stroke-linecap="round"/>
-
-            <!-- SHOULDERS — wide, round, prominent (key David Laid feature) -->
-            <ellipse cx="19" cy="50" rx="10" ry="9" class="mg" id="mf-shoulder-l" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.8" transform="rotate(-15,19,50)"/>
-            <ellipse cx="81" cy="50" rx="10" ry="9" class="mg" id="mf-shoulder-r" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.8" transform="rotate(15,81,50)"/>
-
-            <!-- BICEPS — lean and defined, not huge -->
-            <path d="M8,60 Q5,66 6,76 Q7,83 11,85 Q15,87 17,82 Q19,74 18,64 Q17,57 13,56 Z" class="mg" id="mf-bicep-l" fill="#1a1a1a" stroke="#272727" stroke-width="0.7"/>
-            <!-- bicep peak line -->
-            <path d="M9,68 Q12,65 15,68" fill="none" stroke="#232323" stroke-width="0.8" stroke-linecap="round"/>
-
-            <!-- BICEPS RIGHT -->
-            <path d="M92,60 Q95,66 94,76 Q93,83 89,85 Q85,87 83,82 Q81,74 82,64 Q83,57 87,56 Z" class="mg" id="mf-bicep-r" fill="#1a1a1a" stroke="#272727" stroke-width="0.7"/>
-            <path d="M91,68 Q88,65 85,68" fill="none" stroke="#232323" stroke-width="0.8" stroke-linecap="round"/>
-
-            <!-- FOREARMS — tapered -->
-            <path d="M7,87 Q4,93 5,103 Q6,110 10,112 Q14,113 16,108 Q18,100 17,89 Q15,85 11,84 Z" class="mg" id="mf-forearm-l" fill="#161616" stroke="#222" stroke-width="0.6"/>
-            <path d="M93,87 Q96,93 95,103 Q94,110 90,112 Q86,113 84,108 Q82,100 83,89 Q85,85 89,84 Z" class="mg" id="mf-forearm-r" fill="#161616" stroke="#222" stroke-width="0.6"/>
-
-            <!-- SERRATUS / OBLIQUES — very narrow waist, slight oblique definition -->
-            <path d="M26,72 Q23,80 24,90 Q25,97 29,99 Q33,99 35,93 Q36,85 34,75 Q31,69 26,72 Z" class="mg" id="mf-oblique-l" fill="#171717" stroke="#242424" stroke-width="0.6"/>
-            <path d="M74,72 Q77,80 76,90 Q75,97 71,99 Q67,99 65,93 Q64,85 66,75 Q69,69 74,72 Z" class="mg" id="mf-oblique-r" fill="#171717" stroke="#242424" stroke-width="0.6"/>
-
-            <!-- ABS — 6 pack, lean and tight, close together (narrow waist) -->
-            <rect x="43" y="66" width="6" height="6" rx="2" class="mg" id="mf-abs-1l" fill="#1c1c1c" stroke="#272727" stroke-width="0.6"/>
-            <rect x="51" y="66" width="6" height="6" rx="2" class="mg" id="mf-abs-1r" fill="#1c1c1c" stroke="#272727" stroke-width="0.6"/>
-            <rect x="43" y="74" width="6" height="6" rx="2" class="mg" id="mf-abs-2l" fill="#1c1c1c" stroke="#272727" stroke-width="0.6"/>
-            <rect x="51" y="74" width="6" height="6" rx="2" class="mg" id="mf-abs-2r" fill="#1c1c1c" stroke="#272727" stroke-width="0.6"/>
-            <rect x="43" y="82" width="6" height="6" rx="2" class="mg" id="mf-abs-3l" fill="#1c1c1c" stroke="#272727" stroke-width="0.6"/>
-            <rect x="51" y="82" width="6" height="6" rx="2" class="mg" id="mf-abs-3r" fill="#1c1c1c" stroke="#272727" stroke-width="0.6"/>
-            <!-- lower abs / linea -->
-            <path d="M44,89 Q50,93 56,89 Q54,98 50,100 Q46,98 44,89 Z" class="mg" id="mf-abs-lower" fill="#191919" stroke="#262626" stroke-width="0.6"/>
-
-            <!-- Hip — narrow -->
-            <path d="M37,102 Q38,108 50,110 Q62,108 63,102 Q58,98 50,98 Q42,98 37,102 Z" fill="#111" stroke="#1c1c1c" stroke-width="0.6"/>
-
-            <!-- QUADS — lean and striated, not thick -->
-            <!-- Left quad -->
-            <path d="M35,110 Q31,117 30,132 Q29,146 32,157 Q35,164 40,165 Q46,165 49,159 Q52,150 51,134 Q50,118 46,110 Q42,107 37,108 Z" class="mg" id="mf-quad-l" fill="#1a1a1a" stroke="#272727" stroke-width="0.7"/>
-            <!-- quad sweep lines -->
-            <path d="M36,120 Q41,117 47,120" fill="none" stroke="#212121" stroke-width="0.7"/>
-            <path d="M34,136 Q41,132 49,136" fill="none" stroke="#212121" stroke-width="0.7"/>
-            <!-- teardrop VMO -->
-            <ellipse cx="43" cy="157" rx="5" ry="6" class="mg" id="mf-quad-inner-l" fill="#191919" stroke="#252525" stroke-width="0.6"/>
-
-            <!-- Right quad -->
-            <path d="M65,110 Q69,117 70,132 Q71,146 68,157 Q65,164 60,165 Q54,165 51,159 Q48,150 49,134 Q50,118 54,110 Q58,107 63,108 Z" class="mg" id="mf-quad-r" fill="#1a1a1a" stroke="#272727" stroke-width="0.7"/>
-            <path d="M64,120 Q59,117 53,120" fill="none" stroke="#212121" stroke-width="0.7"/>
-            <path d="M66,136 Q59,132 51,136" fill="none" stroke="#212121" stroke-width="0.7"/>
-            <ellipse cx="57" cy="157" rx="5" ry="6" class="mg" id="mf-quad-inner-r" fill="#191919" stroke="#252525" stroke-width="0.6"/>
-
-            <!-- CALVES — lean diamond shape -->
-            <path d="M31,166 Q28,175 29,187 Q30,194 35,197 Q40,198 43,192 Q46,184 44,172 Q43,165 37,163 Z" class="mg" id="mf-calf-l" fill="#161616" stroke="#222" stroke-width="0.6"/>
-            <path d="M69,166 Q72,175 71,187 Q70,194 65,197 Q60,198 57,192 Q54,184 56,172 Q57,165 63,163 Z" class="mg" id="mf-calf-r" fill="#161616" stroke="#222" stroke-width="0.6"/>
-
-            <!-- Shins -->
-            <path d="M31,198 Q30,210 31,220 Q33,226 36,227 Q40,227 42,222 Q43,213 42,200 Q40,196 35,196 Z" fill="#111" stroke="#1a1a1a" stroke-width="0.5"/>
-            <path d="M69,198 Q70,210 69,220 Q67,226 64,227 Q60,227 58,222 Q57,213 58,200 Q60,196 65,196 Z" fill="#111" stroke="#1a1a1a" stroke-width="0.5"/>
-
-            <!-- Feet -->
-            <ellipse cx="36" cy="252" rx="9" ry="4" fill="#0e0e0e" stroke="#1a1a1a" stroke-width="0.5"/>
-            <ellipse cx="64" cy="252" rx="9" ry="4" fill="#0e0e0e" stroke="#1a1a1a" stroke-width="0.5"/>
+            <path d="M76,44 Q75,37 63,39 Q52,41 50,52 Q50,63 56,68 Q64,70 71,63 Q78,56 76,44 Z" class="mg" id="mf-chest-r" fill="#1c1c1c" stroke="#2b2b2b" stroke-width="0.9"/>
+            <path d="M74,48 Q63,42 50,47" fill="none" stroke="#252525" stroke-width="0.8" stroke-linecap="round"/>
+            <path d="M75,56 Q63,52 50,56" fill="none" stroke="#212121" stroke-width="0.6" stroke-linecap="round"/>
+            <!-- BICEPS -->
+            <path d="M5,61 Q2,69 3,80 Q4,88 9,90 Q14,92 17,86 Q19,77 18,66 Q16,58 11,58 Z" class="mg" id="mf-bicep-l" fill="#1b1b1b" stroke="#2a2a2a" stroke-width="0.8"/>
+            <path d="M6,71 Q10,67 15,71" fill="none" stroke="#252525" stroke-width="0.9" stroke-linecap="round"/>
+            <path d="M95,61 Q98,69 97,80 Q96,88 91,90 Q86,92 83,86 Q81,77 82,66 Q84,58 89,58 Z" class="mg" id="mf-bicep-r" fill="#1b1b1b" stroke="#2a2a2a" stroke-width="0.8"/>
+            <path d="M94,71 Q90,67 85,71" fill="none" stroke="#252525" stroke-width="0.9" stroke-linecap="round"/>
+            <!-- FOREARMS -->
+            <path d="M4,92 Q1,100 2,112 Q3,120 8,122 Q13,123 15,117 Q17,108 16,95 Q14,89 9,89 Z" class="mg" id="mf-forearm-l" fill="#181818" stroke="#262626" stroke-width="0.7"/>
+            <path d="M96,92 Q99,100 98,112 Q97,120 92,122 Q87,123 85,117 Q83,108 84,95 Q86,89 91,89 Z" class="mg" id="mf-forearm-r" fill="#181818" stroke="#262626" stroke-width="0.7"/>
+            <!-- OBLIQUES / SERRATUS -->
+            <path d="M22,70 Q18,80 19,93 Q20,101 25,103 Q30,103 32,96 Q34,86 32,74 Q28,67 22,70 Z" class="mg" id="mf-oblique-l" fill="#191919" stroke="#272727" stroke-width="0.7"/>
+            <path d="M23,76 Q25,81 22,87" fill="none" stroke="#232323" stroke-width="0.7"/>
+            <path d="M23,87 Q25,92 22,97" fill="none" stroke="#232323" stroke-width="0.6"/>
+            <path d="M78,70 Q82,80 81,93 Q80,101 75,103 Q70,103 68,96 Q66,86 68,74 Q72,67 78,70 Z" class="mg" id="mf-oblique-r" fill="#191919" stroke="#272727" stroke-width="0.7"/>
+            <path d="M77,76 Q75,81 78,87" fill="none" stroke="#232323" stroke-width="0.7"/>
+            <path d="M77,87 Q75,92 78,97" fill="none" stroke="#232323" stroke-width="0.6"/>
+            <!-- ABS — natural teardrop shapes, tight linea alba -->
+            <line x1="50" y1="66" x2="50" y2="108" stroke="#131313" stroke-width="1"/>
+            <path d="M42,67 Q46,65 49,67 L49,76 Q46,77 42,76 Q40,73 42,67 Z" class="mg" id="mf-abs-1l" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.7"/>
+            <path d="M58,67 Q54,65 51,67 L51,76 Q54,77 58,76 Q60,73 58,67 Z" class="mg" id="mf-abs-1r" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.7"/>
+            <path d="M42,78 Q46,76 49,78 L49,87 Q46,88 42,87 Q40,84 42,78 Z" class="mg" id="mf-abs-2l" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.7"/>
+            <path d="M58,78 Q54,76 51,78 L51,87 Q54,88 58,87 Q60,84 58,78 Z" class="mg" id="mf-abs-2r" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.7"/>
+            <path d="M43,89 Q46,87 49,89 L49,97 Q46,98 43,97 Q41,94 43,89 Z" class="mg" id="mf-abs-3l" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.7"/>
+            <path d="M57,89 Q54,87 51,89 L51,97 Q54,98 57,97 Q59,94 57,89 Z" class="mg" id="mf-abs-3r" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.7"/>
+            <path d="M43,99 Q47,97 50,99 Q53,97 57,99 Q55,107 50,109 Q45,107 43,99 Z" class="mg" id="mf-abs-lower" fill="#1b1b1b" stroke="#282828" stroke-width="0.7"/>
+            <!-- HIPS -->
+            <path d="M33,108 Q35,115 50,117 Q65,115 67,108 Q61,103 50,102 Q39,103 33,108 Z" fill="#0f0f0f" stroke="#1a1a1a" stroke-width="0.5"/>
+            <!-- QUADS — prominent 4-head shape -->
+            <path d="M31,115 Q26,124 24,141 Q22,156 25,169 Q29,178 36,180 Q44,181 48,172 Q51,162 50,144 Q49,125 43,115 Q38,110 32,113 Z" class="mg" id="mf-quad-l" fill="#1c1c1c" stroke="#2a2a2a" stroke-width="0.9"/>
+            <path d="M32,126 Q38,121 45,126" fill="none" stroke="#242424" stroke-width="0.8"/>
+            <path d="M29,143 Q38,137 48,143" fill="none" stroke="#242424" stroke-width="0.7"/>
+            <path d="M27,159 Q37,153 48,159" fill="none" stroke="#212121" stroke-width="0.6"/>
+            <ellipse cx="40" cy="171" rx="6" ry="7" class="mg" id="mf-quad-inner-l" fill="#1b1b1b" stroke="#292929" stroke-width="0.8"/>
+            <path d="M69,115 Q74,124 76,141 Q78,156 75,169 Q71,178 64,180 Q56,181 52,172 Q49,162 50,144 Q51,125 57,115 Q62,110 68,113 Z" class="mg" id="mf-quad-r" fill="#1c1c1c" stroke="#2a2a2a" stroke-width="0.9"/>
+            <path d="M68,126 Q62,121 55,126" fill="none" stroke="#242424" stroke-width="0.8"/>
+            <path d="M71,143 Q62,137 52,143" fill="none" stroke="#242424" stroke-width="0.7"/>
+            <path d="M73,159 Q63,153 52,159" fill="none" stroke="#212121" stroke-width="0.6"/>
+            <ellipse cx="60" cy="171" rx="6" ry="7" class="mg" id="mf-quad-inner-r" fill="#1b1b1b" stroke="#292929" stroke-width="0.8"/>
+            <!-- CALVES — diamond gastrocnemius -->
+            <path d="M26,181 Q22,192 23,206 Q24,215 30,218 Q36,220 40,213 Q43,204 41,189 Q39,180 33,178 Z" class="mg" id="mf-calf-l" fill="#191919" stroke="#282828" stroke-width="0.8"/>
+            <path d="M28,193 Q33,188 38,193" fill="none" stroke="#232323" stroke-width="0.8" stroke-linecap="round"/>
+            <path d="M74,181 Q78,192 77,206 Q76,215 70,218 Q64,220 60,213 Q57,204 59,189 Q61,180 67,178 Z" class="mg" id="mf-calf-r" fill="#191919" stroke="#282828" stroke-width="0.8"/>
+            <path d="M72,193 Q67,188 62,193" fill="none" stroke="#232323" stroke-width="0.8" stroke-linecap="round"/>
+            <!-- SHINS -->
+            <path d="M26,219 Q25,232 26,241 Q28,247 32,248 Q37,248 39,243 Q40,234 39,221 Q37,217 32,217 Z" fill="#111" stroke="#1c1c1c" stroke-width="0.5"/>
+            <path d="M74,219 Q75,232 74,241 Q72,247 68,248 Q63,248 61,243 Q60,234 61,221 Q63,217 68,217 Z" fill="#111" stroke="#1c1c1c" stroke-width="0.5"/>
+            <!-- FEET -->
+            <ellipse cx="33" cy="257" rx="10" ry="4" fill="#0d0d0d" stroke="#1a1a1a" stroke-width="0.5"/>
+            <ellipse cx="67" cy="257" rx="10" ry="4" fill="#0d0d0d" stroke="#1a1a1a" stroke-width="0.5"/>
           </svg>
         </div>
       </div>
@@ -320,83 +307,64 @@ textarea.checkin-input{resize:vertical;min-height:80px;}
       <div class="body-svg-wrap">
         <div class="body-svg-label">Back</div>
         <div class="body-svg-container">
-          <svg viewBox="0 0 100 290" xmlns="http://www.w3.org/2000/svg">
-            <!-- Head -->
-            <ellipse cx="50" cy="16" rx="11" ry="13" fill="#161616" stroke="#2a2a2a" stroke-width="0.7"/>
-            <!-- Neck -->
-            <rect x="45" y="28" width="10" height="10" rx="3" fill="#141414" stroke="#222" stroke-width="0.6"/>
-
-            <!-- TORSO BACK — very wide at top, narrow at waist -->
-            <path d="M28,38 Q18,42 16,56 Q15,70 18,82 Q22,92 28,98 Q36,104 50,105 Q64,104 72,98 Q78,92 82,82 Q85,70 84,56 Q82,42 72,38 Z" fill="#111" stroke="#1c1c1c" stroke-width="0.6"/>
-
-            <!-- TRAPS — wide trapezoid from neck to shoulder caps -->
-            <path d="M33,38 Q42,34 50,36 Q58,34 67,38 Q63,47 57,50 Q53,52 50,52 Q47,52 43,50 Q37,47 33,38 Z" class="mg" id="mb-trap" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.7"/>
-
-            <!-- REAR DELTS — round caps, wide -->
-            <ellipse cx="19" cy="50" rx="10" ry="9" class="mg" id="mb-rear-delt-l" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.8" transform="rotate(-15,19,50)"/>
-            <ellipse cx="81" cy="50" rx="10" ry="9" class="mg" id="mb-rear-delt-r" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.8" transform="rotate(15,81,50)"/>
-
-            <!-- LATS — massive sweep, David Laid signature wide lats -->
-            <path d="M16,56 Q13,66 15,78 Q17,88 22,93 Q27,96 32,90 Q36,82 34,68 Q32,57 25,53 Z" class="mg" id="mb-lat-l" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.8"/>
-            <path d="M84,56 Q87,66 85,78 Q83,88 78,93 Q73,96 68,90 Q64,82 66,68 Q68,57 75,53 Z" class="mg" id="mb-lat-r" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.8"/>
-
+          <svg viewBox="0 0 100 280" xmlns="http://www.w3.org/2000/svg">
+            <!-- HEAD -->
+            <ellipse cx="50" cy="13" rx="10" ry="12" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="0.7"/>
+            <!-- NECK BACK -->
+            <path d="M44,24 Q44,34 46,36 Q50,37 54,36 Q56,34 56,24 Q50,22 44,24 Z" fill="#151515" stroke="#222" stroke-width="0.6"/>
+            <!-- TORSO BACK SILHOUETTE -->
+            <path d="M24,35 Q8,40 7,56 Q6,72 10,86 Q15,98 24,106 Q35,113 50,114 Q65,113 76,106 Q85,98 90,86 Q94,72 93,56 Q92,40 76,35 Z" fill="#0f0f0f" stroke="#1a1a1a" stroke-width="0.5"/>
+            <!-- TRAPS — large diamond from neck down to mid-back -->
+            <path d="M30,35 Q40,30 50,32 Q60,30 70,35 Q67,47 60,53 Q55,56 50,56 Q45,56 40,53 Q33,47 30,35 Z" class="mg" id="mb-trap" fill="#1f1f1f" stroke="#2e2e2e" stroke-width="0.9"/>
+            <!-- REAR DELTS — prominent round caps -->
+            <path d="M7,40 Q6,33 13,33 Q22,34 26,43 Q28,52 23,59 Q17,63 11,59 Q5,53 7,40 Z" class="mg" id="mb-rear-delt-l" fill="#1e1e1e" stroke="#2d2d2d" stroke-width="0.9"/>
+            <path d="M93,40 Q94,33 87,33 Q78,34 74,43 Q72,52 77,59 Q83,63 89,59 Q95,53 93,40 Z" class="mg" id="mb-rear-delt-r" fill="#1e1e1e" stroke="#2d2d2d" stroke-width="0.9"/>
+            <!-- LATS — wide sweeping fan, the V-taper maker -->
+            <path d="M9,57 Q6,69 8,82 Q11,94 17,99 Q24,103 31,97 Q36,89 34,73 Q32,60 23,55 Z" class="mg" id="mb-lat-l" fill="#1f1f1f" stroke="#2e2e2e" stroke-width="1"/>
+            <path d="M91,57 Q94,69 92,82 Q89,94 83,99 Q76,103 69,97 Q64,89 66,73 Q68,60 77,55 Z" class="mg" id="mb-lat-r" fill="#1f1f1f" stroke="#2e2e2e" stroke-width="1"/>
             <!-- MID BACK / RHOMBOIDS -->
-            <path d="M35,52 Q43,48 50,50 Q57,48 65,52 Q63,64 57,68 Q53,70 50,70 Q47,70 43,68 Q37,64 35,52 Z" class="mg" id="mb-mid-back" fill="#191919" stroke="#252525" stroke-width="0.7"/>
-            <!-- spine line -->
-            <line x1="50" y1="50" x2="50" y2="100" stroke="#161616" stroke-width="0.8"/>
-            <!-- horizontal striations -->
-            <line x1="37" y1="58" x2="63" y2="58" stroke="#1e1e1e" stroke-width="0.5"/>
-            <line x1="37" y1="64" x2="63" y2="64" stroke="#1e1e1e" stroke-width="0.5"/>
-
-            <!-- LOWER BACK — erector spinae, narrow columns -->
-            <path d="M44,71 Q47,69 49,71 Q50,80 50,93 Q48,99 46,101 Q43,99 42,93 Q42,80 44,71 Z" class="mg" id="mb-lower-back-l" fill="#191919" stroke="#252525" stroke-width="0.6"/>
-            <path d="M56,71 Q53,69 51,71 Q50,80 50,93 Q52,99 54,101 Q57,99 58,93 Q58,80 56,71 Z" class="mg" id="mb-lower-back-r" fill="#191919" stroke="#252525" stroke-width="0.6"/>
-
-            <!-- TRICEPS — lean horseshoe shape -->
-            <path d="M8,60 Q5,66 6,77 Q7,84 11,86 Q15,88 17,83 Q19,75 18,64 Q17,57 13,56 Z" class="mg" id="mb-tricep-l" fill="#1a1a1a" stroke="#272727" stroke-width="0.7"/>
-            <!-- horseshoe detail -->
-            <path d="M9,70 Q12,66 15,69 Q16,74 14,78" fill="none" stroke="#232323" stroke-width="0.9" stroke-linecap="round"/>
-
-            <path d="M92,60 Q95,66 94,77 Q93,84 89,86 Q85,88 83,83 Q81,75 82,64 Q83,57 87,56 Z" class="mg" id="mb-tricep-r" fill="#1a1a1a" stroke="#272727" stroke-width="0.7"/>
-            <path d="M91,70 Q88,66 85,69 Q84,74 86,78" fill="none" stroke="#232323" stroke-width="0.9" stroke-linecap="round"/>
-
+            <path d="M33,53 Q41,48 50,50 Q59,48 67,53 Q65,66 58,71 Q54,74 50,74 Q46,74 42,71 Q35,66 33,53 Z" class="mg" id="mb-mid-back" fill="#1b1b1b" stroke="#292929" stroke-width="0.8"/>
+            <!-- Spine + horizontal striations -->
+            <line x1="50" y1="50" x2="50" y2="105" stroke="#141414" stroke-width="1.1"/>
+            <line x1="35" y1="59" x2="65" y2="59" stroke="#202020" stroke-width="0.5"/>
+            <line x1="35" y1="65" x2="65" y2="65" stroke="#202020" stroke-width="0.5"/>
+            <line x1="36" y1="71" x2="64" y2="71" stroke="#1e1e1e" stroke-width="0.5"/>
+            <!-- LOWER BACK — erector spinae columns -->
+            <path d="M44,74 Q47,72 49,74 Q50,86 50,100 Q48,106 46,108 Q43,106 42,100 Q42,86 44,74 Z" class="mg" id="mb-lower-back-l" fill="#1b1b1b" stroke="#292929" stroke-width="0.7"/>
+            <path d="M56,74 Q53,72 51,74 Q50,86 50,100 Q52,106 54,108 Q57,106 58,100 Q58,86 56,74 Z" class="mg" id="mb-lower-back-r" fill="#1b1b1b" stroke="#292929" stroke-width="0.7"/>
+            <!-- TRICEPS — horseshoe shape -->
+            <path d="M5,61 Q2,69 3,80 Q4,88 9,90 Q14,92 17,86 Q19,77 18,66 Q16,58 11,58 Z" class="mg" id="mb-tricep-l" fill="#1b1b1b" stroke="#2a2a2a" stroke-width="0.8"/>
+            <path d="M7,72 Q11,67 15,71 Q16,77 13,81" fill="none" stroke="#272727" stroke-width="1" stroke-linecap="round"/>
+            <path d="M95,61 Q98,69 97,80 Q96,88 91,90 Q86,92 83,86 Q81,77 82,66 Q84,58 89,58 Z" class="mg" id="mb-tricep-r" fill="#1b1b1b" stroke="#2a2a2a" stroke-width="0.8"/>
+            <path d="M93,72 Q89,67 85,71 Q84,77 87,81" fill="none" stroke="#272727" stroke-width="1" stroke-linecap="round"/>
             <!-- FOREARMS BACK -->
-            <path d="M7,88 Q4,94 5,104 Q6,111 10,113 Q14,114 16,109 Q18,101 17,90 Q15,86 11,85 Z" class="mg" id="mb-forearm-bl" fill="#161616" stroke="#222" stroke-width="0.6"/>
-            <path d="M93,88 Q96,94 95,104 Q94,111 90,113 Q86,114 84,109 Q82,101 83,90 Q85,86 89,85 Z" class="mg" id="mb-forearm-br" fill="#161616" stroke="#222" stroke-width="0.6"/>
-
-            <!-- GLUTES — full and round, defined split -->
-            <path d="M33,100 Q32,109 34,116 Q38,122 46,124 Q50,125 50,124 Q50,125 54,124 Q62,122 66,116 Q68,109 67,100 Q62,95 50,93 Q38,95 33,100 Z" class="mg" id="mb-glute" fill="#1c1c1c" stroke="#282828" stroke-width="0.7"/>
-            <!-- glute split -->
-            <line x1="50" y1="94" x2="50" y2="123" stroke="#131313" stroke-width="1"/>
-            <!-- glute roundness lines -->
-            <path d="M35,107 Q42,103 49,107" fill="none" stroke="#1e1e1e" stroke-width="0.6"/>
-            <path d="M65,107 Q58,103 51,107" fill="none" stroke="#1e1e1e" stroke-width="0.6"/>
-
-            <!-- HAMSTRINGS — lean and striated -->
-            <path d="M33,125 Q29,133 28,147 Q27,159 30,168 Q33,175 39,176 Q45,176 48,170 Q51,161 50,146 Q49,131 44,124 Q39,121 34,123 Z" class="mg" id="mb-hamstring-l" fill="#1a1a1a" stroke="#272727" stroke-width="0.7"/>
-            <!-- ham striations -->
-            <path d="M34,135 Q40,131 46,135" fill="none" stroke="#202020" stroke-width="0.6"/>
-            <path d="M32,150 Q40,145 48,150" fill="none" stroke="#202020" stroke-width="0.6"/>
-
-            <path d="M67,125 Q71,133 72,147 Q73,159 70,168 Q67,175 61,176 Q55,176 52,170 Q49,161 50,146 Q51,131 56,124 Q61,121 66,123 Z" class="mg" id="mb-hamstring-r" fill="#1a1a1a" stroke="#272727" stroke-width="0.7"/>
-            <path d="M66,135 Q60,131 54,135" fill="none" stroke="#202020" stroke-width="0.6"/>
-            <path d="M68,150 Q60,145 52,150" fill="none" stroke="#202020" stroke-width="0.6"/>
-
-            <!-- CALVES BACK — diamond gastrocnemius -->
-            <path d="M29,177 Q26,187 27,199 Q29,207 34,210 Q39,211 42,205 Q45,197 44,183 Q42,175 37,173 Z" class="mg" id="mb-calf-l" fill="#181818" stroke="#252525" stroke-width="0.7"/>
-            <!-- calf split line -->
-            <path d="M32,185 Q36,181 40,185" fill="none" stroke="#202020" stroke-width="0.7" stroke-linecap="round"/>
-
-            <path d="M71,177 Q74,187 73,199 Q71,207 66,210 Q61,211 58,205 Q55,197 56,183 Q58,175 63,173 Z" class="mg" id="mb-calf-r" fill="#181818" stroke="#252525" stroke-width="0.7"/>
-            <path d="M68,185 Q64,181 60,185" fill="none" stroke="#202020" stroke-width="0.7" stroke-linecap="round"/>
-
-            <!-- Achilles / shin back -->
-            <path d="M30,211 Q29,222 30,230 Q32,235 35,236 Q39,236 41,231 Q42,223 41,212 Q39,209 35,209 Z" fill="#111" stroke="#1a1a1a" stroke-width="0.5"/>
-            <path d="M70,211 Q71,222 70,230 Q68,235 65,236 Q61,236 59,231 Q58,223 59,212 Q61,209 65,209 Z" fill="#111" stroke="#1a1a1a" stroke-width="0.5"/>
-
-            <!-- Feet -->
-            <ellipse cx="36" cy="252" rx="9" ry="4" fill="#0e0e0e" stroke="#1a1a1a" stroke-width="0.5"/>
-            <ellipse cx="64" cy="252" rx="9" ry="4" fill="#0e0e0e" stroke="#1a1a1a" stroke-width="0.5"/>
+            <path d="M4,92 Q1,100 2,112 Q3,120 8,122 Q13,123 15,117 Q17,108 16,95 Q14,89 9,89 Z" class="mg" id="mb-forearm-bl" fill="#181818" stroke="#262626" stroke-width="0.7"/>
+            <path d="M96,92 Q99,100 98,112 Q97,120 92,122 Q87,123 85,117 Q83,108 84,95 Q86,89 91,89 Z" class="mg" id="mb-forearm-br" fill="#181818" stroke="#262626" stroke-width="0.7"/>
+            <!-- GLUTES — large, round, full split -->
+            <path d="M30,105 Q28,116 31,126 Q35,135 46,138 Q50,139 50,138 Q50,139 54,138 Q65,135 69,126 Q72,116 70,105 Q63,98 50,96 Q37,98 30,105 Z" class="mg" id="mb-glute" fill="#1e1e1e" stroke="#2c2c2c" stroke-width="0.9"/>
+            <line x1="50" y1="97" x2="50" y2="137" stroke="#121212" stroke-width="1.2"/>
+            <path d="M32,115 Q41,110 49,114" fill="none" stroke="#222" stroke-width="0.8"/>
+            <path d="M68,115 Q59,110 51,114" fill="none" stroke="#222" stroke-width="0.8"/>
+            <!-- HAMSTRINGS — two prominent heads each side -->
+            <path d="M30,139 Q25,149 24,165 Q23,179 27,190 Q31,198 38,199 Q46,200 49,191 Q52,180 51,163 Q50,145 44,137 Q38,132 32,136 Z" class="mg" id="mb-hamstring-l" fill="#1c1c1c" stroke="#2a2a2a" stroke-width="0.9"/>
+            <path d="M32,150 Q38,144 46,150" fill="none" stroke="#242424" stroke-width="0.8"/>
+            <path d="M29,166 Q38,160 50,166" fill="none" stroke="#242424" stroke-width="0.7"/>
+            <path d="M28,181 Q38,175 50,181" fill="none" stroke="#212121" stroke-width="0.6"/>
+            <path d="M70,139 Q75,149 76,165 Q77,179 73,190 Q69,198 62,199 Q54,200 51,191 Q48,180 49,163 Q50,145 56,137 Q62,132 68,136 Z" class="mg" id="mb-hamstring-r" fill="#1c1c1c" stroke="#2a2a2a" stroke-width="0.9"/>
+            <path d="M68,150 Q62,144 54,150" fill="none" stroke="#242424" stroke-width="0.8"/>
+            <path d="M71,166 Q62,160 50,166" fill="none" stroke="#242424" stroke-width="0.7"/>
+            <path d="M72,181 Q62,175 50,181" fill="none" stroke="#212121" stroke-width="0.6"/>
+            <!-- CALVES BACK — diamond two-headed gastrocnemius -->
+            <path d="M27,200 Q22,212 23,226 Q25,236 31,239 Q37,241 41,234 Q44,224 43,209 Q41,199 35,197 Z" class="mg" id="mb-calf-l" fill="#1a1a1a" stroke="#292929" stroke-width="0.8"/>
+            <path d="M29,211 Q34,206 39,211" fill="none" stroke="#242424" stroke-width="0.8" stroke-linecap="round"/>
+            <path d="M73,200 Q78,212 77,226 Q75,236 69,239 Q63,241 59,234 Q56,224 57,209 Q59,199 65,197 Z" class="mg" id="mb-calf-r" fill="#1a1a1a" stroke="#292929" stroke-width="0.8"/>
+            <path d="M71,211 Q66,206 61,211" fill="none" stroke="#242424" stroke-width="0.8" stroke-linecap="round"/>
+            <!-- ACHILLES / LOWER LEGS -->
+            <path d="M27,240 Q26,251 27,258 Q29,263 33,264 Q37,264 39,259 Q40,251 39,241 Q37,238 33,238 Z" fill="#111" stroke="#1c1c1c" stroke-width="0.5"/>
+            <path d="M73,240 Q74,251 73,258 Q71,263 67,264 Q63,264 61,259 Q60,251 61,241 Q63,238 67,238 Z" fill="#111" stroke="#1c1c1c" stroke-width="0.5"/>
+            <!-- FEET -->
+            <ellipse cx="33" cy="271" rx="10" ry="4" fill="#0d0d0d" stroke="#1a1a1a" stroke-width="0.5"/>
+            <ellipse cx="67" cy="271" rx="10" ry="4" fill="#0d0d0d" stroke="#1a1a1a" stroke-width="0.5"/>
           </svg>
         </div>
       </div>
