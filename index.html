@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ASCEND</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#c9a84c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="ASCEND">
+<link rel="apple-touch-icon" href="icon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0a0a0a;--surface:#111;--surface2:#1a1a1a;--surface3:#222;--border:#2a2a2a;--gold:#c9a84c;--gold-bright:#f0c040;--gold-dim:#5a4a1a;--text:#e8e8e8;--text-muted:#666;--text-dim:#444;--green-bright:#3dba6a;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--black);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:4px;color:var(--gold);}
+.streak-badge{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--gold-dim);border-radius:20px;padding:6px 14px;font-size:13px;font-weight:500;color:var(--gold);}
+.date-display{font-size:12px;color:var(--text-muted);}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.streak-hero{padding:20px;background:var(--surface);border-bottom:1px solid var(--border);}
+.streak-row{display:flex;gap:10px;align-items:stretch;}
+.streak-card{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;}
+.streak-num{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--gold);line-height:1;}
+.streak-label{font-size:11px;color:var(--text-muted);margin-top:4px;text-transform:uppercase;letter-spacing:1px;}
+.progress-card{flex:2;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;}
+.progress-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.progress-bar-bg{background:var(--surface3);border-radius:4px;height:8px;overflow:hidden;margin-bottom:6px;}
+.progress-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--gold-dim),var(--gold));transition:width .5s ease;}
+.progress-pct{font-size:13px;color:var(--gold);font-weight:500;}
+/* BODY DIAGRAM */
+.body-section{padding:16px 20px;}
+.body-diagram-wrap{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;display:flex;flex-direction:column;align-items:center;}
+.body-title{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--text-muted);margin-bottom:12px;}
+.body-svg-row{display:flex;gap:12px;justify-content:center;align-items:flex-start;}
+.body-svg-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.body-svg-label{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);}
+.body-svg-container{width:130px;height:270px;}
+.body-svg-container svg{width:100%;height:100%;}
+.mg{transition:fill .35s ease,stroke .35s ease,filter .35s ease;}
+.week-glow{animation:wg 2s ease-in-out infinite;}
+@keyframes wg{0%,100%{filter:drop-shadow(0 0 5px #f0c040)}50%{filter:drop-shadow(0 0 14px #f0c040)}}
+.muscle-legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;justify-content:center;}
+.muscle-pill{font-size:10px;padding:3px 8px;border-radius:10px;background:var(--surface2);color:var(--text-muted);border:1px solid var(--border);transition:all .3s;}
+.muscle-pill.active{background:var(--gold-dim);color:var(--gold);border-color:var(--gold-dim);}
+/* NAV */
+.nav{display:flex;overflow-x:auto;padding:0 20px;background:var(--surface);border-bottom:1px solid var(--border);scrollbar-width:none;}
+.nav::-webkit-scrollbar{display:none;}
+.nav-btn{flex-shrink:0;padding:14px 16px;font-size:12px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap;}
+.nav-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+.content{padding:16px 20px;max-width:700px;margin:0 auto;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+.section-head{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:var(--gold);margin:20px 0 10px;}
+.section-head:first-child{margin-top:0;}
+.time-tag{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:2px 8px;display:inline-block;margin-bottom:8px;}
+/* CHECKLIST */
+.check-item{display:flex;align-items:flex-start;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all .2s;user-select:none;}
+.check-item.checked{border-color:var(--gold-dim);background:rgba(201,168,76,.05);}
+.check-item.checked .check-label{color:var(--text-muted);text-decoration:line-through;}
+.check-box{width:22px;height:22px;border:1.5px solid var(--border);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px;}
+.check-item.checked .check-box{background:var(--gold);border-color:var(--gold);}
+.chk-svg{display:none;}
+.check-item.checked .chk-svg{display:block;}
+.check-label{font-size:14px;color:var(--text);line-height:1.4;}
+.check-sub{font-size:12px;color:var(--text-muted);margin-top:3px;line-height:1.4;}
+/* WORKOUT */
+.workout-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;}
+.workout-header{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;}
+.workout-check{width:22px;height:22px;border:1.5px solid var(--border);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.workout-item.checked .workout-check{background:var(--gold);border-color:var(--gold);}
+.workout-item.checked .workout-check .chk-svg{display:block;}
+.workout-name{flex:1;font-size:14px;color:var(--text);font-weight:500;}
+.workout-item.checked .workout-name{color:var(--text-muted);text-decoration:line-through;}
+.expand-arrow{font-size:12px;color:var(--text-muted);transition:transform .2s;}
+.workout-item.open .expand-arrow{transform:rotate(180deg);}
+.workout-detail{display:none;padding:0 14px 14px;}
+.workout-item.open .workout-detail{display:block;}
+.ex-table{width:100%;border-collapse:collapse;font-size:13px;}
+.ex-table th{text-align:left;color:var(--text-muted);font-size:10px;text-transform:uppercase;letter-spacing:1px;padding:6px 0;border-bottom:1px solid var(--border);font-weight:400;}
+.ex-table td{padding:8px 0;border-bottom:1px solid var(--surface2);color:var(--text);vertical-align:top;}
+.ex-table tr:last-child td{border-bottom:none;}
+.ex-note{font-size:11px;color:var(--text-muted);margin-top:2px;}
+.ex-tag{font-size:10px;background:var(--gold-dim);color:var(--gold);padding:1px 6px;border-radius:8px;display:inline-block;}
+/* DAY SELECTOR */
+.day-selector{display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+.day-selector::-webkit-scrollbar{display:none;}
+.day-btn{flex-shrink:0;padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text-muted);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;text-transform:uppercase;letter-spacing:1px;}
+.day-btn.active{background:var(--gold);color:var(--black);border-color:var(--gold);font-weight:600;}
+/* MACROS */
+.macro-section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px;}
+.macro-title{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:14px;}
+.macro-wheel-wrap{display:flex;align-items:center;gap:20px;}
+.macro-canvas-wrap{position:relative;width:110px;height:110px;flex-shrink:0;}
+.macro-center-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+.macro-total-cal{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);line-height:1;}
+.macro-cal-label{font-size:9px;color:var(--text-muted);text-transform:uppercase;}
+.macro-legend{flex:1;}
+.macro-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.macro-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.macro-name{font-size:12px;color:var(--text);}
+.macro-val{font-size:11px;color:var(--text-muted);}
+/* MEAL */
+.meal-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;}
+.meal-time{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin-bottom:6px;}
+.meal-name{font-size:15px;font-weight:500;color:var(--text);margin-bottom:6px;}
+.meal-items{font-size:13px;color:var(--text-muted);line-height:1.7;}
+.meal-macros{display:flex;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
+.meal-macro-num{font-size:14px;font-weight:500;color:var(--text);}
+.meal-macro-label{font-size:10px;color:var(--text-muted);}
+/* SLEEP */
+.sleep-input-row{display:flex;gap:10px;margin-bottom:14px;}
+.sleep-input-group{flex:1;}
+.sleep-label-sm{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.sleep-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;padding:10px 12px;font-family:'DM Sans',sans-serif;outline:none;}
+.sleep-input:focus{border-color:var(--gold);}
+.sleep-result{background:var(--surface2);border-radius:10px;padding:12px 14px;text-align:center;margin-bottom:14px;}
+.sleep-hours-big{font-family:'Bebas Neue',sans-serif;font-size:42px;line-height:1;}
+.good-color{color:var(--green-bright);}
+.bad-color{color:#e05050;}
+.sleep-flag{font-size:13px;margin-top:4px;}
+.sleep-log-btn{width:100%;background:var(--gold);color:var(--black);border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:1px;}
+.sleep-hist-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.sleep-hist-item:last-child{border-bottom:none;}
+/* MOOD */
+.mood-row{display:flex;gap:8px;}
+.mood-btn{flex:1;padding:10px 6px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:18px;cursor:pointer;text-align:center;transition:all .2s;}
+.mood-btn.selected{border-color:var(--gold);background:var(--gold-dim);}
+/* CHECKIN */
+.checkin-form{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;}
+.checkin-field{margin-bottom:14px;}
+.checkin-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;}
+.checkin-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;padding:10px 12px;font-family:'DM Sans',sans-serif;outline:none;}
+.checkin-input:focus{border-color:var(--gold);}
+textarea.checkin-input{resize:vertical;min-height:80px;}
+.save-btn{width:100%;background:var(--gold);color:var(--black);border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:1px;margin-top:4px;}
+.checkin-entry{background:var(--surface2);border-radius:10px;padding:12px;margin-bottom:8px;}
+.checkin-entry-date{font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.checkin-entry-body{font-size:13px;color:var(--text-muted);line-height:1.6;}
+/* PEPTIDES */
+.peptide-empty{text-align:center;padding:30px 20px;}
+.peptide-empty-icon{font-size:36px;margin-bottom:10px;}
+.peptide-empty-text{font-size:14px;color:var(--text-muted);line-height:1.6;}
+.add-form{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;}
+.add-form-title{font-size:13px;font-weight:500;color:var(--gold);margin-bottom:12px;}
+.add-inputs{display:flex;flex-direction:column;gap:8px;}
+.add-input-row{display:flex;gap:8px;}
+.add-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;padding:10px 12px;font-family:'DM Sans',sans-serif;outline:none;}
+.add-input:focus{border-color:var(--gold);}
+.add-btn{background:var(--gold);color:var(--black);border:none;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;margin-top:4px;}
+/* JAW TIMER */
+.jaw-timer{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;margin-bottom:14px;}
+.timer-display{font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--gold);letter-spacing:4px;line-height:1;}
+.timer-lbl{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;}
+.timer-btns{display:flex;gap:8px;justify-content:center;}
+.timer-btn{padding:10px 24px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.timer-btn.primary{background:var(--gold);color:var(--black);border-color:var(--gold);}
+/* COUNTER */
+.counter-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;margin-bottom:10px;}
+.counter-title{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:10px;}
+.counter-display{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--gold);line-height:1;}
+.counter-btns{display:flex;gap:8px;justify-content:center;margin-top:10px;}
+.counter-btn{width:44px;height:44px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:20px;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;}
+.counter-btn.plus{background:var(--gold);color:var(--black);border-color:var(--gold);}
+/* CUSTOM TASKS */
+.add-task-row{display:flex;gap:8px;margin-top:12px;}
+.add-task-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;padding:10px 12px;font-family:'DM Sans',sans-serif;outline:none;}
+.add-task-input:focus{border-color:var(--gold);}
+.add-task-btn{background:var(--gold);color:var(--black);border:none;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+.del-btn{background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:16px;padding:0 0 0 8px;line-height:1;flex-shrink:0;}
+.del-btn:hover{color:#e05050;}
+/* INFO NOTE */
+.info-note{font-size:12px;color:var(--text-muted);background:var(--surface2);border-left:3px solid var(--gold-dim);border-radius:0 8px 8px 0;padding:10px 12px;margin-bottom:12px;line-height:1.6;}
+/* WEEK BANNER */
+.week-banner{background:linear-gradient(135deg,#1a1400,#2a2000);border:1px solid var(--gold);border-radius:14px;padding:16px;text-align:center;margin-bottom:16px;display:none;}
+.week-banner.show{display:block;animation:wg 2s ease-in-out infinite;}
+.week-banner-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:var(--gold-bright);}
+/* HISTORY TAB */
+.hist-week{background:var(--surface);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden;}
+.hist-week-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer;border-bottom:1px solid var(--border);}
+.hist-week-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--gold);}
+.hist-week-meta{font-size:12px;color:var(--text-muted);}
+.hist-week-body{padding:14px 16px;display:none;}
+.hist-week.open .hist-week-body{display:block;}
+.hist-cat{margin-bottom:12px;}
+.hist-cat-title{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;}
+.hist-item-done{font-size:13px;color:var(--text);padding:3px 0;display:flex;align-items:center;gap:6px;}
+.hist-item-done::before{content:"✓";color:var(--gold);font-size:11px;}
+.hist-stat-row{display:flex;gap:10px;margin-bottom:10px;}
+.hist-stat{flex:1;background:var(--surface2);border-radius:8px;padding:10px;text-align:center;}
+.hist-stat-num{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);}
+.hist-stat-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="logo">ASCEND</div>
+  <div class="topbar-right">
+    <div class="streak-badge">&#128293;<span id="streakCount">0</span> day streak</div>
+    <div class="date-display" id="todayDate"></div>
+  </div>
+</div>
+
+<div class="streak-hero">
+  <div class="week-banner" id="weekBanner">
+    <div class="week-banner-title">&#9889; WEEK COMPLETE &#9889;</div>
+    <div style="font-size:13px;color:var(--gold);margin-top:4px;">Full body trained. You are ascending.</div>
+  </div>
+  <div class="streak-row">
+    <div class="streak-card"><div class="streak-num" id="heroStreak">0</div><div class="streak-label">Day Streak</div></div>
+    <div class="streak-card"><div class="streak-num" id="weekDays">0/7</div><div class="streak-label">Days This Week</div></div>
+    <div class="progress-card">
+      <div class="progress-label">Today Progress</div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBar" style="width:0%"></div></div>
+      <div class="progress-pct" id="progressPct">0% complete</div>
+    </div>
+  </div>
+</div>
+
+<!-- BODY DIAGRAM -->
+<div class="body-section">
+  <div class="body-diagram-wrap">
+    <div class="body-title">Muscles Trained This Week</div>
+    <div class="body-svg-row">
+
+      <!-- FRONT VIEW — David Laid proportions: wide shoulders, narrow waist, lean -->
+      <div class="body-svg-wrap">
+        <div class="body-svg-label">Front</div>
+        <div class="body-svg-container">
+          <svg viewBox="0 0 100 290" xmlns="http://www.w3.org/2000/svg">
+            <!-- Head — small and lean -->
+            <ellipse cx="50" cy="16" rx="11" ry="13" fill="#161616" stroke="#2a2a2a" stroke-width="0.7"/>
+            <!-- Neck — narrow -->
+            <rect x="45" y="28" width="10" height="10" rx="3" fill="#141414" stroke="#222" stroke-width="0.6"/>
+            <!-- Neck muscles -->
+            <path d="M45,29 Q42,34 43,38" class="mg" id="mf-neck" fill="none" stroke="#1e1e1e" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M55,29 Q58,34 57,38" class="mg" id="mf-neck2" fill="none" stroke="#1e1e1e" stroke-width="2.5" stroke-linecap="round"/>
+
+            <!-- TORSO — wide at shoulders, very narrow at waist (V-taper) -->
+            <!-- Trapezoidal torso base -->
+            <path d="M28,38 Q18,42 16,56 Q15,70 18,82 Q22,92 28,98 Q36,104 50,105 Q64,104 72,98 Q78,92 82,82 Q85,70 84,56 Q82,42 72,38 Z" fill="#111" stroke="#1c1c1c" stroke-width="0.6"/>
+
+            <!-- CHEST LEFT — pec with upper/lower division, lean not boxy -->
+            <path d="M30,45 Q33,41 43,43 Q50,45 49,54 Q48,61 43,63 Q37,63 32,58 Q28,53 30,45 Z" class="mg" id="mf-chest-l" fill="#191919" stroke="#2a2a2a" stroke-width="0.7"/>
+            <!-- upper chest detail line -->
+            <path d="M31,47 Q42,43 49,47" fill="none" stroke="#222" stroke-width="1" stroke-linecap="round"/>
+
+            <!-- CHEST RIGHT -->
+            <path d="M70,45 Q67,41 57,43 Q50,45 51,54 Q52,61 57,63 Q63,63 68,58 Q72,53 70,45 Z" class="mg" id="mf-chest-r" fill="#191919" stroke="#2a2a2a" stroke-width="0.7"/>
+            <path d="M69,47 Q58,43 51,47" fill="none" stroke="#222" stroke-width="1" stroke-linecap="round"/>
+
+            <!-- SHOULDERS — wide, round, prominent (key David Laid feature) -->
+            <ellipse cx="19" cy="50" rx="10" ry="9" class="mg" id="mf-shoulder-l" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.8" transform="rotate(-15,19,50)"/>
+            <ellipse cx="81" cy="50" rx="10" ry="9" class="mg" id="mf-shoulder-r" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.8" transform="rotate(15,81,50)"/>
+
+            <!-- BICEPS — lean and defined, not huge -->
+            <path d="M8,60 Q5,66 6,76 Q7,83 11,85 Q15,87 17,82 Q19,74 18,64 Q17,57 13,56 Z" class="mg" id="mf-bicep-l" fill="#1a1a1a" stroke="#272727" stroke-width="0.7"/>
+            <!-- bicep peak line -->
+            <path d="M9,68 Q12,65 15,68" fill="none" stroke="#232323" stroke-width="0.8" stroke-linecap="round"/>
+
+            <!-- BICEPS RIGHT -->
+            <path d="M92,60 Q95,66 94,76 Q93,83 89,85 Q85,87 83,82 Q81,74 82,64 Q83,57 87,56 Z" class="mg" id="mf-bicep-r" fill="#1a1a1a" stroke="#272727" stroke-width="0.7"/>
+            <path d="M91,68 Q88,65 85,68" fill="none" stroke="#232323" stroke-width="0.8" stroke-linecap="round"/>
+
+            <!-- FOREARMS — tapered -->
+            <path d="M7,87 Q4,93 5,103 Q6,110 10,112 Q14,113 16,108 Q18,100 17,89 Q15,85 11,84 Z" class="mg" id="mf-forearm-l" fill="#161616" stroke="#222" stroke-width="0.6"/>
+            <path d="M93,87 Q96,93 95,103 Q94,110 90,112 Q86,113 84,108 Q82,100 83,89 Q85,85 89,84 Z" class="mg" id="mf-forearm-r" fill="#161616" stroke="#222" stroke-width="0.6"/>
+
+            <!-- SERRATUS / OBLIQUES — very narrow waist, slight oblique definition -->
+            <path d="M26,72 Q23,80 24,90 Q25,97 29,99 Q33,99 35,93 Q36,85 34,75 Q31,69 26,72 Z" class="mg" id="mf-oblique-l" fill="#171717" stroke="#242424" stroke-width="0.6"/>
+            <path d="M74,72 Q77,80 76,90 Q75,97 71,99 Q67,99 65,93 Q64,85 66,75 Q69,69 74,72 Z" class="mg" id="mf-oblique-r" fill="#171717" stroke="#242424" stroke-width="0.6"/>
+
+            <!-- ABS — 6 pack, lean and tight, close together (narrow waist) -->
+            <rect x="43" y="66" width="6" height="6" rx="2" class="mg" id="mf-abs-1l" fill="#1c1c1c" stroke="#272727" stroke-width="0.6"/>
+            <rect x="51" y="66" width="6" height="6" rx="2" class="mg" id="mf-abs-1r" fill="#1c1c1c" stroke="#272727" stroke-width="0.6"/>
+            <rect x="43" y="74" width="6" height="6" rx="2" class="mg" id="mf-abs-2l" fill="#1c1c1c" stroke="#272727" stroke-width="0.6"/>
+            <rect x="51" y="74" width="6" height="6" rx="2" class="mg" id="mf-abs-2r" fill="#1c1c1c" stroke="#272727" stroke-width="0.6"/>
+            <rect x="43" y="82" width="6" height="6" rx="2" class="mg" id="mf-abs-3l" fill="#1c1c1c" stroke="#272727" stroke-width="0.6"/>
+            <rect x="51" y="82" width="6" height="6" rx="2" class="mg" id="mf-abs-3r" fill="#1c1c1c" stroke="#272727" stroke-width="0.6"/>
+            <!-- lower abs / linea -->
+            <path d="M44,89 Q50,93 56,89 Q54,98 50,100 Q46,98 44,89 Z" class="mg" id="mf-abs-lower" fill="#191919" stroke="#262626" stroke-width="0.6"/>
+
+            <!-- Hip — narrow -->
+            <path d="M37,102 Q38,108 50,110 Q62,108 63,102 Q58,98 50,98 Q42,98 37,102 Z" fill="#111" stroke="#1c1c1c" stroke-width="0.6"/>
+
+            <!-- QUADS — lean and striated, not thick -->
+            <!-- Left quad -->
+            <path d="M35,110 Q31,117 30,132 Q29,146 32,157 Q35,164 40,165 Q46,165 49,159 Q52,150 51,134 Q50,118 46,110 Q42,107 37,108 Z" class="mg" id="mf-quad-l" fill="#1a1a1a" stroke="#272727" stroke-width="0.7"/>
+            <!-- quad sweep lines -->
+            <path d="M36,120 Q41,117 47,120" fill="none" stroke="#212121" stroke-width="0.7"/>
+            <path d="M34,136 Q41,132 49,136" fill="none" stroke="#212121" stroke-width="0.7"/>
+            <!-- teardrop VMO -->
+            <ellipse cx="43" cy="157" rx="5" ry="6" class="mg" id="mf-quad-inner-l" fill="#191919" stroke="#252525" stroke-width="0.6"/>
+
+            <!-- Right quad -->
+            <path d="M65,110 Q69,117 70,132 Q71,146 68,157 Q65,164 60,165 Q54,165 51,159 Q48,150 49,134 Q50,118 54,110 Q58,107 63,108 Z" class="mg" id="mf-quad-r" fill="#1a1a1a" stroke="#272727" stroke-width="0.7"/>
+            <path d="M64,120 Q59,117 53,120" fill="none" stroke="#212121" stroke-width="0.7"/>
+            <path d="M66,136 Q59,132 51,136" fill="none" stroke="#212121" stroke-width="0.7"/>
+            <ellipse cx="57" cy="157" rx="5" ry="6" class="mg" id="mf-quad-inner-r" fill="#191919" stroke="#252525" stroke-width="0.6"/>
+
+            <!-- CALVES — lean diamond shape -->
+            <path d="M31,166 Q28,175 29,187 Q30,194 35,197 Q40,198 43,192 Q46,184 44,172 Q43,165 37,163 Z" class="mg" id="mf-calf-l" fill="#161616" stroke="#222" stroke-width="0.6"/>
+            <path d="M69,166 Q72,175 71,187 Q70,194 65,197 Q60,198 57,192 Q54,184 56,172 Q57,165 63,163 Z" class="mg" id="mf-calf-r" fill="#161616" stroke="#222" stroke-width="0.6"/>
+
+            <!-- Shins -->
+            <path d="M31,198 Q30,210 31,220 Q33,226 36,227 Q40,227 42,222 Q43,213 42,200 Q40,196 35,196 Z" fill="#111" stroke="#1a1a1a" stroke-width="0.5"/>
+            <path d="M69,198 Q70,210 69,220 Q67,226 64,227 Q60,227 58,222 Q57,213 58,200 Q60,196 65,196 Z" fill="#111" stroke="#1a1a1a" stroke-width="0.5"/>
+
+            <!-- Feet -->
+            <ellipse cx="36" cy="252" rx="9" ry="4" fill="#0e0e0e" stroke="#1a1a1a" stroke-width="0.5"/>
+            <ellipse cx="64" cy="252" rx="9" ry="4" fill="#0e0e0e" stroke="#1a1a1a" stroke-width="0.5"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- BACK VIEW — David Laid V-taper: wide lats, narrow waist, full glutes -->
+      <div class="body-svg-wrap">
+        <div class="body-svg-label">Back</div>
+        <div class="body-svg-container">
+          <svg viewBox="0 0 100 290" xmlns="http://www.w3.org/2000/svg">
+            <!-- Head -->
+            <ellipse cx="50" cy="16" rx="11" ry="13" fill="#161616" stroke="#2a2a2a" stroke-width="0.7"/>
+            <!-- Neck -->
+            <rect x="45" y="28" width="10" height="10" rx="3" fill="#141414" stroke="#222" stroke-width="0.6"/>
+
+            <!-- TORSO BACK — very wide at top, narrow at waist -->
+            <path d="M28,38 Q18,42 16,56 Q15,70 18,82 Q22,92 28,98 Q36,104 50,105 Q64,104 72,98 Q78,92 82,82 Q85,70 84,56 Q82,42 72,38 Z" fill="#111" stroke="#1c1c1c" stroke-width="0.6"/>
+
+            <!-- TRAPS — wide trapezoid from neck to shoulder caps -->
+            <path d="M33,38 Q42,34 50,36 Q58,34 67,38 Q63,47 57,50 Q53,52 50,52 Q47,52 43,50 Q37,47 33,38 Z" class="mg" id="mb-trap" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.7"/>
+
+            <!-- REAR DELTS — round caps, wide -->
+            <ellipse cx="19" cy="50" rx="10" ry="9" class="mg" id="mb-rear-delt-l" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.8" transform="rotate(-15,19,50)"/>
+            <ellipse cx="81" cy="50" rx="10" ry="9" class="mg" id="mb-rear-delt-r" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.8" transform="rotate(15,81,50)"/>
+
+            <!-- LATS — massive sweep, David Laid signature wide lats -->
+            <path d="M16,56 Q13,66 15,78 Q17,88 22,93 Q27,96 32,90 Q36,82 34,68 Q32,57 25,53 Z" class="mg" id="mb-lat-l" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.8"/>
+            <path d="M84,56 Q87,66 85,78 Q83,88 78,93 Q73,96 68,90 Q64,82 66,68 Q68,57 75,53 Z" class="mg" id="mb-lat-r" fill="#1d1d1d" stroke="#2a2a2a" stroke-width="0.8"/>
+
+            <!-- MID BACK / RHOMBOIDS -->
+            <path d="M35,52 Q43,48 50,50 Q57,48 65,52 Q63,64 57,68 Q53,70 50,70 Q47,70 43,68 Q37,64 35,52 Z" class="mg" id="mb-mid-back" fill="#191919" stroke="#252525" stroke-width="0.7"/>
+            <!-- spine line -->
+            <line x1="50" y1="50" x2="50" y2="100" stroke="#161616" stroke-width="0.8"/>
+            <!-- horizontal striations -->
+            <line x1="37" y1="58" x2="63" y2="58" stroke="#1e1e1e" stroke-width="0.5"/>
+            <line x1="37" y1="64" x2="63" y2="64" stroke="#1e1e1e" stroke-width="0.5"/>
+
+            <!-- LOWER BACK — erector spinae, narrow columns -->
+            <path d="M44,71 Q47,69 49,71 Q50,80 50,93 Q48,99 46,101 Q43,99 42,93 Q42,80 44,71 Z" class="mg" id="mb-lower-back-l" fill="#191919" stroke="#252525" stroke-width="0.6"/>
+            <path d="M56,71 Q53,69 51,71 Q50,80 50,93 Q52,99 54,101 Q57,99 58,93 Q58,80 56,71 Z" class="mg" id="mb-lower-back-r" fill="#191919" stroke="#252525" stroke-width="0.6"/>
+
+            <!-- TRICEPS — lean horseshoe shape -->
+            <path d="M8,60 Q5,66 6,77 Q7,84 11,86 Q15,88 17,83 Q19,75 18,64 Q17,57 13,56 Z" class="mg" id="mb-tricep-l" fill="#1a1a1a" stroke="#272727" stroke-width="0.7"/>
+            <!-- horseshoe detail -->
+            <path d="M9,70 Q12,66 15,69 Q16,74 14,78" fill="none" stroke="#232323" stroke-width="0.9" stroke-linecap="round"/>
+
+            <path d="M92,60 Q95,66 94,77 Q93,84 89,86 Q85,88 83,83 Q81,75 82,64 Q83,57 87,56 Z" class="mg" id="mb-tricep-r" fill="#1a1a1a" stroke="#272727" stroke-width="0.7"/>
+            <path d="M91,70 Q88,66 85,69 Q84,74 86,78" fill="none" stroke="#232323" stroke-width="0.9" stroke-linecap="round"/>
+
+            <!-- FOREARMS BACK -->
+            <path d="M7,88 Q4,94 5,104 Q6,111 10,113 Q14,114 16,109 Q18,101 17,90 Q15,86 11,85 Z" class="mg" id="mb-forearm-bl" fill="#161616" stroke="#222" stroke-width="0.6"/>
+            <path d="M93,88 Q96,94 95,104 Q94,111 90,113 Q86,114 84,109 Q82,101 83,90 Q85,86 89,85 Z" class="mg" id="mb-forearm-br" fill="#161616" stroke="#222" stroke-width="0.6"/>
+
+            <!-- GLUTES — full and round, defined split -->
+            <path d="M33,100 Q32,109 34,116 Q38,122 46,124 Q50,125 50,124 Q50,125 54,124 Q62,122 66,116 Q68,109 67,100 Q62,95 50,93 Q38,95 33,100 Z" class="mg" id="mb-glute" fill="#1c1c1c" stroke="#282828" stroke-width="0.7"/>
+            <!-- glute split -->
+            <line x1="50" y1="94" x2="50" y2="123" stroke="#131313" stroke-width="1"/>
+            <!-- glute roundness lines -->
+            <path d="M35,107 Q42,103 49,107" fill="none" stroke="#1e1e1e" stroke-width="0.6"/>
+            <path d="M65,107 Q58,103 51,107" fill="none" stroke="#1e1e1e" stroke-width="0.6"/>
+
+            <!-- HAMSTRINGS — lean and striated -->
+            <path d="M33,125 Q29,133 28,147 Q27,159 30,168 Q33,175 39,176 Q45,176 48,170 Q51,161 50,146 Q49,131 44,124 Q39,121 34,123 Z" class="mg" id="mb-hamstring-l" fill="#1a1a1a" stroke="#272727" stroke-width="0.7"/>
+            <!-- ham striations -->
+            <path d="M34,135 Q40,131 46,135" fill="none" stroke="#202020" stroke-width="0.6"/>
+            <path d="M32,150 Q40,145 48,150" fill="none" stroke="#202020" stroke-width="0.6"/>
+
+            <path d="M67,125 Q71,133 72,147 Q73,159 70,168 Q67,175 61,176 Q55,176 52,170 Q49,161 50,146 Q51,131 56,124 Q61,121 66,123 Z" class="mg" id="mb-hamstring-r" fill="#1a1a1a" stroke="#272727" stroke-width="0.7"/>
+            <path d="M66,135 Q60,131 54,135" fill="none" stroke="#202020" stroke-width="0.6"/>
+            <path d="M68,150 Q60,145 52,150" fill="none" stroke="#202020" stroke-width="0.6"/>
+
+            <!-- CALVES BACK — diamond gastrocnemius -->
+            <path d="M29,177 Q26,187 27,199 Q29,207 34,210 Q39,211 42,205 Q45,197 44,183 Q42,175 37,173 Z" class="mg" id="mb-calf-l" fill="#181818" stroke="#252525" stroke-width="0.7"/>
+            <!-- calf split line -->
+            <path d="M32,185 Q36,181 40,185" fill="none" stroke="#202020" stroke-width="0.7" stroke-linecap="round"/>
+
+            <path d="M71,177 Q74,187 73,199 Q71,207 66,210 Q61,211 58,205 Q55,197 56,183 Q58,175 63,173 Z" class="mg" id="mb-calf-r" fill="#181818" stroke="#252525" stroke-width="0.7"/>
+            <path d="M68,185 Q64,181 60,185" fill="none" stroke="#202020" stroke-width="0.7" stroke-linecap="round"/>
+
+            <!-- Achilles / shin back -->
+            <path d="M30,211 Q29,222 30,230 Q32,235 35,236 Q39,236 41,231 Q42,223 41,212 Q39,209 35,209 Z" fill="#111" stroke="#1a1a1a" stroke-width="0.5"/>
+            <path d="M70,211 Q71,222 70,230 Q68,235 65,236 Q61,236 59,231 Q58,223 59,212 Q61,209 65,209 Z" fill="#111" stroke="#1a1a1a" stroke-width="0.5"/>
+
+            <!-- Feet -->
+            <ellipse cx="36" cy="252" rx="9" ry="4" fill="#0e0e0e" stroke="#1a1a1a" stroke-width="0.5"/>
+            <ellipse cx="64" cy="252" rx="9" ry="4" fill="#0e0e0e" stroke="#1a1a1a" stroke-width="0.5"/>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+    <div class="muscle-legend" id="muscleLegend">
+      <div class="muscle-pill" data-muscle="chest">Chest</div>
+      <div class="muscle-pill" data-muscle="shoulders">Shoulders</div>
+      <div class="muscle-pill" data-muscle="back">Back/Lats</div>
+      <div class="muscle-pill" data-muscle="arms">Biceps</div>
+      <div class="muscle-pill" data-muscle="triceps">Triceps</div>
+      <div class="muscle-pill" data-muscle="legs">Quads</div>
+      <div class="muscle-pill" data-muscle="hamstrings">Hams</div>
+      <div class="muscle-pill" data-muscle="glutes">Glutes</div>
+      <div class="muscle-pill" data-muscle="abs">Abs</div>
+      <div class="muscle-pill" data-muscle="neck">Neck</div>
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showTab('workout',this)">Workout</button>
+  <button class="nav-btn" onclick="showTab('skincare',this)">Skincare</button>
+  <button class="nav-btn" onclick="showTab('supplements',this)">Supplements</button>
+  <button class="nav-btn" onclick="showTab('posture',this)">Posture</button>
+  <button class="nav-btn" onclick="showTab('stretching',this)">Stretching</button>
+  <button class="nav-btn" onclick="showTab('diet',this)">Diet</button>
+  <button class="nav-btn" onclick="showTab('jaw',this)">Jaw &amp; Face</button>
+  <button class="nav-btn" onclick="showTab('peptides',this)">Peptides</button>
+  <button class="nav-btn" onclick="showTab('sleep',this)">Sleep</button>
+  <button class="nav-btn" onclick="showTab('checkin',this)">Check-In</button>
+  <button class="nav-btn" onclick="showTab('history',this)">History</button>
+</div>
+
+<div class="content">
+
+<div id="tab-workout" class="tab-panel active">
+  <div class="day-selector" id="daySelector"></div>
+  <div id="workoutContent"></div>
+  <div class="section-head">Custom Tasks</div>
+  <div id="workoutCustomTasks"></div>
+  <div class="add-task-row"><input class="add-task-input" id="workoutCustomInput" placeholder="Add custom workout task..."/><button class="add-task-btn" onclick="addCustomTask('workout')">+ Add</button></div>
+</div>
+
+<div id="tab-skincare" class="tab-panel">
+  <div class="section-head">Morning Routine</div><div class="time-tag">6:30 AM</div>
+  <div id="skincareMorning"></div>
+  <div class="section-head">Night Routine</div><div class="time-tag">9:45 PM</div>
+  <div id="skincareNight"></div>
+  <div class="section-head">Weekly</div><div class="time-tag">Sunday</div>
+  <div id="skincareWeekly"></div>
+  <div class="section-head">Custom</div><div id="skincareCustomTasks"></div>
+  <div class="add-task-row"><input class="add-task-input" id="skincareCustomInput" placeholder="Add skincare task..."/><button class="add-task-btn" onclick="addCustomTask('skincare')">+ Add</button></div>
+</div>
+
+<div id="tab-supplements" class="tab-panel">
+  <div class="section-head">Morning — With Breakfast</div><div class="time-tag">7:00 AM</div>
+  <div id="suppMorning"></div>
+  <div class="section-head">Post-Workout</div><div class="time-tag">Within 30 min</div>
+  <div id="suppPostWorkout"></div>
+  <div class="section-head">Night</div><div class="time-tag">9:00 PM</div>
+  <div id="suppNight"></div>
+  <div class="section-head">Custom</div><div id="suppCustomTasks"></div>
+  <div class="add-task-row"><input class="add-task-input" id="suppCustomInput" placeholder="Add supplement..."/><button class="add-task-btn" onclick="addCustomTask('supplements')">+ Add</button></div>
+</div>
+
+<div id="tab-posture" class="tab-panel">
+  <div class="section-head">Morning Drill</div><div class="time-tag">6:45 AM</div><div id="postureMorning"></div>
+  <div class="section-head">Midday Checks</div><div class="time-tag">Every 2 hours</div><div id="postureMidday"></div>
+  <div class="section-head">Evening Reset</div><div class="time-tag">9:00 PM</div><div id="postureEvening"></div>
+  <div class="section-head">Custom</div><div id="postureCustomTasks"></div>
+  <div class="add-task-row"><input class="add-task-input" id="postureCustomInput" placeholder="Add posture task..."/><button class="add-task-btn" onclick="addCustomTask('posture')">+ Add</button></div>
+</div>
+
+<div id="tab-stretching" class="tab-panel">
+  <div class="section-head">Morning Mobility</div><div class="time-tag">6:45 AM — 10 min</div><div id="stretchMorning"></div>
+  <div class="section-head">Post-Workout</div><div class="time-tag">After training — 10 min</div><div id="stretchPostWorkout"></div>
+  <div class="section-head">Night Flexibility</div><div class="time-tag">10:00 PM — 10 min</div><div id="stretchNight"></div>
+  <div class="section-head">Custom</div><div id="stretchCustomTasks"></div>
+  <div class="add-task-row"><input class="add-task-input" id="stretchCustomInput" placeholder="Add stretch..."/><button class="add-task-btn" onclick="addCustomTask('stretching')">+ Add</button></div>
+</div>
+
+<div id="tab-diet" class="tab-panel">
+  <div class="macro-section">
+    <div class="macro-title">Daily Macros — Lean Bulk</div>
+    <div class="macro-wheel-wrap">
+      <div class="macro-canvas-wrap"><canvas id="macroWheel" width="110" height="110"></canvas><div class="macro-center-text"><div class="macro-total-cal">3,100</div><div class="macro-cal-label">calories</div></div></div>
+      <div class="macro-legend">
+        <div class="macro-row"><div class="macro-dot" style="background:#c9a84c"></div><div><div class="macro-name">Protein</div><div class="macro-val">190g &middot; 760 cal</div></div></div>
+        <div class="macro-row"><div class="macro-dot" style="background:#3dba6a"></div><div><div class="macro-name">Carbs</div><div class="macro-val">330g &middot; 1320 cal</div></div></div>
+        <div class="macro-row"><div class="macro-dot" style="background:#5588cc"></div><div><div class="macro-name">Fats</div><div class="macro-val">113g &middot; 1020 cal</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div id="mealChecklist"></div>
+  <div class="section-head">Custom</div><div id="dietCustomTasks"></div>
+  <div class="add-task-row"><input class="add-task-input" id="dietCustomInput" placeholder="Add diet task..."/><button class="add-task-btn" onclick="addCustomTask('diet')">+ Add</button></div>
+</div>
+
+<div id="tab-jaw" class="tab-panel">
+  <div class="section-head">Jaw Gum Timer</div>
+  <div class="jaw-timer"><div class="timer-lbl">Falim / Mastic Gum — 20 min</div><div class="timer-display" id="timerDisplay">20:00</div><div class="timer-btns"><button class="timer-btn primary" id="timerStartBtn" onclick="timerAction()">Start</button><button class="timer-btn" onclick="timerReset()">Reset</button></div></div>
+  <div class="section-head">Chin Tuck Counter</div>
+  <div class="counter-card"><div class="counter-title">Daily Chin Tucks — Target: 45</div><div class="counter-display" id="chinTuckCount">0</div><div class="counter-btns"><button class="counter-btn plus" onclick="adjCounter(1)">+</button><button class="counter-btn" onclick="adjCounter(-1)">&#8722;</button><button class="counter-btn" style="font-size:13px" onclick="resetChin()">&#8635;</button></div></div>
+  <div class="section-head">Mewing Check-Ins</div><div id="jawMewing"></div>
+  <div class="section-head">Daily Face Work</div><div id="jawDaily"></div>
+  <div class="section-head">Custom</div><div id="jawCustomTasks"></div>
+  <div class="add-task-row"><input class="add-task-input" id="jawCustomInput" placeholder="Add jaw/face task..."/><button class="add-task-btn" onclick="addCustomTask('jaw')">+ Add</button></div>
+</div>
+
+<div id="tab-peptides" class="tab-panel">
+  <div class="info-note">Empty and ready. Add each peptide below with dose and timing. Everything saves and becomes a daily checkbox.</div>
+  <div class="add-form">
+    <div class="add-form-title">+ Add Peptide</div>
+    <div class="add-inputs">
+      <input class="add-input" id="peptideName" placeholder="Name (e.g. CJC-1295)"/>
+      <div class="add-input-row"><input class="add-input" id="peptideDose" placeholder="Dose (e.g. 100mcg)"/><input class="add-input" id="peptideTime" placeholder="Time (e.g. Pre-sleep)"/></div>
+      <input class="add-input" id="peptideNote" placeholder="Notes (optional)"/>
+      <button class="add-btn" onclick="addPeptide()">Add to Daily Tracker</button>
+    </div>
+  </div>
+  <div id="peptideList"></div>
+</div>
+
+<div id="tab-sleep" class="tab-panel">
+  <div class="section-head">Log Sleep</div>
+  <div class="sleep-input-row">
+    <div class="sleep-input-group"><div class="sleep-label-sm">Bedtime</div><input type="time" class="sleep-input" id="bedtimeInput" value="22:30"/></div>
+    <div class="sleep-input-group"><div class="sleep-label-sm">Wake Time</div><input type="time" class="sleep-input" id="wakeInput" value="06:30"/></div>
+  </div>
+  <div class="sleep-result" id="sleepResult"><div class="sleep-hours-big good-color" id="sleepHours">8.0</div><div class="sleep-flag" id="sleepFlag">&#9989; Optimal recovery</div></div>
+  <div class="section-head">Mood &amp; Energy</div>
+  <div style="margin-bottom:14px"><div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">How are you feeling?</div><div class="mood-row" id="moodRow"><button class="mood-btn" onclick="selMood(1)">&#128564;</button><button class="mood-btn" onclick="selMood(2)">&#128528;</button><button class="mood-btn" onclick="selMood(3)">&#128578;</button><button class="mood-btn" onclick="selMood(4)">&#128548;</button><button class="mood-btn" onclick="selMood(5)">&#128293;</button></div></div>
+  <button class="sleep-log-btn" onclick="logSleep()">Log Sleep</button>
+  <div id="sleepHistory"></div>
+</div>
+
+<div id="tab-checkin" class="tab-panel">
+  <div class="section-head">Sunday Check-In</div>
+  <div class="info-note">Log every Sunday. Your weight, wins, what to improve. This becomes your transformation journal.</div>
+  <div class="checkin-form">
+    <div class="checkin-field"><div class="checkin-label">Body Weight (lbs)</div><input class="checkin-input" type="number" id="checkinWeight" placeholder="e.g. 162"/></div>
+    <div class="checkin-field"><div class="checkin-label">Week Rating</div><div class="mood-row" id="weekRatingRow"><button class="mood-btn" onclick="selWeekRating(1)">1</button><button class="mood-btn" onclick="selWeekRating(2)">2</button><button class="mood-btn" onclick="selWeekRating(3)">3</button><button class="mood-btn" onclick="selWeekRating(4)">4</button><button class="mood-btn" onclick="selWeekRating(5)">5</button></div></div>
+    <div class="checkin-field"><div class="checkin-label">Wins This Week</div><textarea class="checkin-input" id="checkinWins" placeholder="What went well..."></textarea></div>
+    <div class="checkin-field"><div class="checkin-label">What to Improve</div><textarea class="checkin-input" id="checkinImprove" placeholder="What to fix next week..."></textarea></div>
+    <div class="checkin-field"><div class="checkin-label">Notes</div><textarea class="checkin-input" id="checkinNotes" placeholder="Skin progress, energy, anything notable..."></textarea></div>
+    <button class="save-btn" onclick="saveCheckin()">Save Check-In</button>
+  </div>
+  <div id="checkinHistory"></div>
+</div>
+
+<!-- HISTORY TAB -->
+<div id="tab-history" class="tab-panel">
+  <div class="section-head">Weekly History</div>
+  <div class="info-note">Every week you complete is logged here automatically. Tap any week to expand and see everything you did.</div>
+  <div id="historyContent"></div>
+</div>
+
+</div>
+
+<script>
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const DAY_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+const WORKOUTS = {
+  0:{name:'Rest / Active Recovery',type:'rest',muscles:[],exercises:[]},
+  1:{name:'Push A — Upper Chest & Shoulder Width',type:'push',muscles:['chest','shoulders','triceps','neck'],exercises:[
+    {name:'Face Pulls (warmup)',sets:'4',reps:'20',note:'Cable at face height, elbows flared. Non-negotiable every push day.',tag:'warmup'},
+    {name:'Incline Barbell Press',sets:'4',reps:'6-8',note:'30-45 degree incline. Upper chest priority. Go heavy. Arch slightly.'},
+    {name:'Incline Dumbbell Press',sets:'3',reps:'10-12',note:'Stretch at bottom, squeeze hard at top. Pause 1 sec at bottom.'},
+    {name:'Cable Incline Fly',sets:'3',reps:'12-15',note:'Cables set low. Focus on upper chest contraction. Slow eccentric.'},
+    {name:'Overhead Press (Barbell)',sets:'4',reps:'6-8',note:'Seated or standing. Tuck elbows slightly. Drive head through at top.'},
+    {name:'Lateral Raises',sets:'5',reps:'15-20',note:'Lead with elbows, slight forward lean. High volume every push day.'},
+    {name:'Tricep Rope Pushdown',sets:'3',reps:'12-15',note:'Split rope at bottom, squeeze triceps hard. Elbows pinned.'},
+    {name:'Skull Crushers',sets:'3',reps:'10-12',note:'EZ bar or dumbbells. Lower to forehead. Keep elbows in.'},
+    {name:'Neck Harness (Flexion + Extension)',sets:'3',reps:'15',note:'3 sec down, 1 sec up. Start light. Neck mass frames the jaw.'},
+  ]},
+  2:{name:'Pull A — Lat Width & Rear Delt',type:'pull',muscles:['back','lats','arms'],exercises:[
+    {name:'Band Pull-Aparts (warmup)',sets:'3',reps:'25',note:'Overhand grip. Full extension. Posture warmup.',tag:'warmup'},
+    {name:'Weighted Pull-Ups',sets:'4',reps:'6-8',note:'Full dead hang at bottom. Touch chest to bar. Use belt if easy.'},
+    {name:'Lat Pulldown (Wide Grip)',sets:'3',reps:'10-12',note:'Lean back slightly, pull to upper chest. Squeeze lats at bottom.'},
+    {name:'Barbell Row (Pendlay Style)',sets:'4',reps:'8',note:'Dead stop each rep from floor. Explosively pull to lower chest.'},
+    {name:'Cable Row (High Elbows)',sets:'3',reps:'12',note:'Elbows flared - upper back focus. Think elbows to ceiling.'},
+    {name:'Face Pulls',sets:'4',reps:'20',note:'Rope at face height. External rotation at end. Rear delt priority.'},
+    {name:'Rear Delt Fly (Dumbbell)',sets:'3',reps:'15-20',note:'Bent over 90 degrees. Fly wide, pause at top.'},
+    {name:'Incline Dumbbell Curl',sets:'3',reps:'12',note:'Full stretch on incline bench. Maximizes bicep peak.'},
+    {name:'Cable Curl',sets:'3',reps:'15',note:'Constant tension. Supinate at top. Slow negatives.'},
+  ]},
+  3:{name:'Legs A — Quad & Glute',type:'legs',muscles:['legs','glutes','hamstrings','abs'],exercises:[
+    {name:'Hip Flexor Stretch (pre)',sets:'2',reps:'2 min',note:'Kneeling lunge stretch. Essential before squatting. Fixes APT.',tag:'warmup'},
+    {name:'Hip Thrust (Barbell)',sets:'4',reps:'10-12',note:'Back on bench, pad on hips. Drive through heels. Squeeze at top.'},
+    {name:'Back Squat (High Bar)',sets:'4',reps:'6-8',note:'Full depth. Stay upright. Builds the quad sweep.'},
+    {name:'Romanian Deadlift',sets:'4',reps:'10',note:'Slight bend in knees. Push hips back. Feel hamstrings load.'},
+    {name:'Leg Press',sets:'3',reps:'15',note:'High foot placement for glute emphasis. Full range.'},
+    {name:'Leg Curl (Seated or Lying)',sets:'3',reps:'12',note:'Pause at peak contraction. Slow 3-sec negative.'},
+    {name:'Dead Bug',sets:'3',reps:'10 per side',note:'Opposite arm and leg extend. Lower back pressed to floor.'},
+    {name:'Plank',sets:'3',reps:'45 sec',note:'Squeeze glutes and abs. Do not let hips sag.'},
+    {name:'Couch Stretch',sets:'2',reps:'90 sec per side',note:'Mandatory post-workout. Anterior pelvic tilt fix.',tag:'cooldown'},
+  ]},
+  4:{name:'Push B — Shoulder Priority',type:'push',muscles:['shoulders','chest','triceps','neck'],exercises:[
+    {name:'Face Pulls (warmup)',sets:'4',reps:'20',note:'Same as always. Protects rotator cuff before pressing.',tag:'warmup'},
+    {name:'Overhead Press (Heavy)',sets:'4',reps:'4-6',note:'Lead lift today. Go heavy. Progressive overload here equals boulder shoulders.'},
+    {name:'Lateral Raises',sets:'5',reps:'15-20',note:'Second priority. 5 sets every push day. This is the key to shoulder width.'},
+    {name:'Cable Lateral Raises',sets:'3',reps:'20',note:'Constant tension. Single arm. Other hand braces on stack.'},
+    {name:'Incline Press (Dumbbell)',sets:'3',reps:'10-12',note:'Upper chest volume. Squeeze at top.'},
+    {name:'Chest Dips (Weighted)',sets:'3',reps:'10',note:'Lean forward to hit chest. Add weight when 10 reps gets easy.'},
+    {name:'Overhead Tricep Extension',sets:'3',reps:'12',note:'Long head stretch. Dumbbells or EZ bar overhead. Slow eccentric.'},
+    {name:'Neck Harness',sets:'3',reps:'15',note:'Flexion and extension. Neck mass equals better jaw appearance.',tag:'cooldown'},
+  ]},
+  5:{name:'Pull B — Arms Priority',type:'pull',muscles:['back','lats','arms'],exercises:[
+    {name:'Band Pull-Aparts (warmup)',sets:'3',reps:'25',note:'Open chest. Set shoulder blades.',tag:'warmup'},
+    {name:'Pull-Ups (Bodyweight)',sets:'3',reps:'Max',note:'All the way down, all the way up. Chase your max each set.'},
+    {name:'Lat Pulldown (Close Grip)',sets:'3',reps:'12',note:'Neutral grip. Different angle than wide pulldown. Lower lat thickness.'},
+    {name:'Cable Row (Neutral Grip)',sets:'3',reps:'12',note:'Elbows back, chest up. Squeeze shoulder blades.'},
+    {name:'Incline Dumbbell Curl',sets:'4',reps:'12',note:'Bicep peak builder. Slow. No momentum. Lead lift for arms today.'},
+    {name:'Cable Curl',sets:'4',reps:'15',note:'Squeeze at top, 3 sec negative. High tension.'},
+    {name:'Hammer Curl',sets:'3',reps:'15',note:'Brachialis and brachioradialis. Builds arm thickness.'},
+    {name:'Concentration Curl',sets:'2',reps:'15',note:'Isolation peak contraction. Elbow on inner thigh.'},
+    {name:'Reverse Curl',sets:'2',reps:'15',note:'Overhand grip. Forearm and brachialis. Visible forearm from front.'},
+  ]},
+  6:{name:'Legs B — Hamstring & Core',type:'legs',muscles:['legs','glutes','hamstrings','abs'],exercises:[
+    {name:'Hip Flexor Stretch (pre)',sets:'2',reps:'2 min',note:'Always before squatting. Do not skip.',tag:'warmup'},
+    {name:'Romanian Deadlift (Heavy)',sets:'4',reps:'8',note:'Lead lift today. Hamstring and glute mass. Push hips back hard.'},
+    {name:'Bulgarian Split Squat',sets:'3',reps:'10 per leg',note:'Back foot elevated. Best single-leg quad builder. Brutal but worth it.'},
+    {name:'Leg Press (Low Foot Placement)',sets:'3',reps:'15',note:'Low feet equals quad emphasis. Full range.'},
+    {name:'Seated Leg Curl',sets:'4',reps:'12',note:'Hamstring separation. Pause at contraction. Slow negative.'},
+    {name:'Hip Thrust (Bodyweight or Banded)',sets:'3',reps:'20',note:'Glute finisher. High rep burnout.'},
+    {name:'Cable Crunch',sets:'3',reps:'15',note:'Rope from cable. Kneel and crunch down.'},
+    {name:'Dead Bug',sets:'3',reps:'10 per side',note:'Core stability. Spine health.'},
+    {name:'Couch Stretch',sets:'2',reps:'90 sec per side',note:'Mandatory post-workout. Anterior pelvic tilt fix.',tag:'cooldown'},
+  ]},
+};
+
+// Per-exercise muscle mapping
+const EX_MUSCLES = {
+  'Face Pulls (warmup)':['shoulders'],'Face Pulls':['shoulders','back'],
+  'Incline Barbell Press':['chest','shoulders'],'Incline Dumbbell Press':['chest'],
+  'Cable Incline Fly':['chest'],'Overhead Press (Barbell)':['shoulders'],
+  'Overhead Press (Heavy)':['shoulders'],'Lateral Raises':['shoulders'],
+  'Cable Lateral Raises':['shoulders'],'Tricep Rope Pushdown':['triceps'],
+  'Skull Crushers':['triceps'],'Neck Harness (Flexion + Extension)':['neck'],
+  'Neck Harness':['neck'],'Band Pull-Aparts (warmup)':['shoulders','back'],
+  'Weighted Pull-Ups':['back','lats','arms'],'Lat Pulldown (Wide Grip)':['back','lats'],
+  'Lat Pulldown (Close Grip)':['back','lats'],'Barbell Row (Pendlay Style)':['back','lats'],
+  'Cable Row (High Elbows)':['back'],'Cable Row (Neutral Grip)':['back'],
+  'Rear Delt Fly (Dumbbell)':['shoulders','back'],'Incline Dumbbell Curl':['arms'],
+  'Cable Curl':['arms'],'Hammer Curl':['arms'],'Concentration Curl':['arms'],
+  'Reverse Curl':['arms'],'Pull-Ups (Bodyweight)':['back','lats','arms'],
+  'Hip Thrust (Barbell)':['glutes','hamstrings'],'Back Squat (High Bar)':['legs','glutes'],
+  'Romanian Deadlift':['hamstrings','glutes'],'Romanian Deadlift (Heavy)':['hamstrings','glutes'],
+  'Leg Press':['legs'],'Leg Press (Low Foot Placement)':['legs'],
+  'Leg Curl (Seated or Lying)':['hamstrings'],'Seated Leg Curl':['hamstrings'],
+  'Dead Bug':['abs'],'Plank':['abs'],'Cable Crunch':['abs'],
+  'Bulgarian Split Squat':['legs','glutes'],'Hip Thrust (Bodyweight or Banded)':['glutes'],
+  'Incline Press (Dumbbell)':['chest','shoulders'],'Chest Dips (Weighted)':['chest','triceps'],
+  'Overhead Tricep Extension':['triceps'],
+};
+
+const MUSCLE_IDS = {
+  chest:['mf-chest-l','mf-chest-r'],
+  shoulders:['mf-shoulder-l','mf-shoulder-r','mb-rear-delt-l','mb-rear-delt-r'],
+  back:['mb-trap','mb-mid-back','mb-lower-back-l','mb-lower-back-r'],
+  lats:['mb-lat-l','mb-lat-r'],
+  arms:['mf-bicep-l','mf-bicep-r'],
+  triceps:['mb-tricep-l','mb-tricep-r'],
+  legs:['mf-quad-l','mf-quad-r','mf-quad-inner-l','mf-quad-inner-r'],
+  hamstrings:['mb-hamstring-l','mb-hamstring-r'],
+  glutes:['mb-glute'],
+  abs:['mf-abs-1l','mf-abs-1r','mf-abs-2l','mf-abs-2r','mf-abs-3l','mf-abs-3r','mf-abs-lower','mf-oblique-l','mf-oblique-r'],
+  neck:['mf-neck','mf-neck2'],
+};
+
+const SK_MORNING=[
+  {id:'sk_m1',label:'Vanicream Gentle Facial Cleanser',sub:'Wet face, pump twice, gentle circular motion 30 sec, rinse with cool water'},
+  {id:'sk_m2',label:'VT Cica Mild Reedle Shot 50',sub:'Apply first step before serums. Boosts absorption of everything after.'},
+  {id:'sk_m3',label:'The Ordinary Niacinamide 10% + Zinc 1%',sub:'3-4 drops. Fades sunspots, controls oil, tightens pores. Most important AM active.'},
+  {id:'sk_m4',label:'Vanicream Vitamin C Serum',sub:'2-3 drops over niacinamide. Brightening and collagen synthesis.'},
+  {id:'sk_m5',label:'Haruharu Wonder Ceramide Moisturizer',sub:'Pea-sized amount. Lock in all layers.'},
+  {id:'sk_m6',label:'La Roche-Posay Anthelios SPF 60',sub:'LAST STEP. Generous amount, cover neck too. Most important daily habit.'},
+];
+const SK_NIGHT=[
+  {id:'sk_n1',label:'Vanicream Gentle Facial Cleanser',sub:'Double cleanse if wore SPF all day. First pass removes SPF, second cleans skin.'},
+  {id:'sk_n2',label:'VT Cica Mild Reedle Shot 50',sub:'First step again on clean dry face. Boosts absorption of actives.'},
+  {id:'sk_n3',label:'CeraVe Resurfacing Retinol Serum',sub:'3 nights per week: Mon, Wed, Fri. On other nights use niacinamide instead.'},
+  {id:'sk_n4',label:'The Ordinary Multi-Peptide + Copper Peptides',sub:'On NON-retinol nights only. Do not layer with retinol. Collagen stimulation.'},
+  {id:'sk_n5',label:'Good Molecules Rosehip Seed Oil',sub:'3-4 drops as final oil layer. Fades pigmentation, antioxidant.'},
+  {id:'sk_n6',label:'Haruharu Wonder Ceramide Moisturizer',sub:'Generous layer to seal everything. Your skin repairs itself tonight.'},
+];
+const SK_WEEKLY=[
+  {id:'sk_w1',label:'Chemical exfoliant (Sunday)',sub:'AHA/BHA. NOT on same night as retinol. Removes dead skin, fades spots.'},
+  {id:'sk_w2',label:'Deep clean hair wash',sub:'Sulfate-free shampoo. Max 2-3x per week for curls.'},
+];
+const SU_MORNING=[
+  {id:'su_m1',label:'Vitamin D3 5000 IU',sub:'With food. Fat-soluble. Testosterone, immunity, skin health.'},
+  {id:'su_m2',label:'Fish Oil 2000mg',sub:'With breakfast. Omega-3 for skin glow, inflammation, joint health.'},
+  {id:'su_m3',label:'Zinc 50mg',sub:'With food. Testosterone support, skin clarity. Away from calcium.'},
+  {id:'su_m4',label:'Collagen Peptides 20g',sub:'Mix into morning drink or shake. Skin elasticity, joint health.'},
+];
+const SU_POST=[
+  {id:'su_p1',label:'Creatine HCl 2g',sub:'Within 30 min post-workout. Mix in water or shake. Strength and recovery.'},
+  {id:'su_p2',label:'Whey Protein 2 scoops',sub:'40-50g protein. Non-negotiable on training days.'},
+];
+const SU_NIGHT=[
+  {id:'su_n1',label:'Magnesium Glycinate 240mg',sub:'30-60 min before bed. Deep sleep quality, muscle recovery.'},
+];
+const PO_MORNING=[
+  {id:'po_m1',label:'Chin tucks 3x15',sub:'Against wall or lying down. Double chin position is correct. Fixes forward head.'},
+  {id:'po_m2',label:'Band pull-aparts 2x20',sub:'Overhand grip. Full extension until band touches chest.'},
+  {id:'po_m3',label:'Wall angels 2x10',sub:'Back flat on wall, arms slide up and down. Scapular movement.'},
+  {id:'po_m4',label:'Doorframe chest stretch 2x30 sec',sub:'Both sides. Pec minor stretch. Counteracts internal shoulder rotation.'},
+];
+const PO_MIDDAY=[
+  {id:'po_d1',label:'Posture check at 10 AM',sub:'Chest proud, shoulders back and DOWN, chin tucked, core slightly braced.'},
+  {id:'po_d2',label:'Posture check at 12 PM',sub:'Reset. If sitting: stand up, roll shoulders back 5x, chin tuck 5x.'},
+  {id:'po_d3',label:'Posture check at 2 PM',sub:'Phone down, head up. Every hour looking down compounds forward head.'},
+  {id:'po_d4',label:'Posture check at 4 PM',sub:'Stand up. Hip flexor stretch 30 sec each side if you have been sitting.'},
+];
+const PO_EVENING=[
+  {id:'po_e1',label:'Thoracic extension over foam roller',sub:'Lie over foam roller at mid-back. 60 sec. Opens thoracic spine.'},
+  {id:'po_e2',label:'Chin tucks final set 3x15',sub:'Before bed. Reinforce neutral head position.'},
+  {id:'po_e3',label:'Sleep position check',sub:'On your back if possible. One pillow. Keeps spine neutral overnight.'},
+];
+const ST_MORNING=[
+  {id:'st_m1',label:'Cat-cow spine mobilization 10 reps',sub:'On all fours. Arch and round spine slowly. Wakes up thoracic vertebrae.'},
+  {id:'st_m2',label:'Thoracic rotation 10 per side',sub:'Seated or lying. Rotate upper back, not lumbar. Fixes mid-back stiffness.'},
+  {id:'st_m3',label:'Hip flexor kneeling lunge 45 sec per side',sub:'Back knee down, drive hips forward. Number one tightness area.'},
+  {id:'st_m4',label:'Neck side tilts 30 sec per side',sub:'Ear toward shoulder. Gentle pressure with hand. Releases upper trap.'},
+];
+const ST_POST=[
+  {id:'st_p1',label:'Chest doorframe stretch 30 sec per side',sub:'After every push day. Counteracts internal shoulder rotation.'},
+  {id:'st_p2',label:'Lat overhead stretch 45 sec per side',sub:'After pull days. Reach overhead and lean sideways. Releases lat tightness.'},
+  {id:'st_p3',label:'Hamstring standing stretch 45 sec per side',sub:'After leg days. Foot on bench, lean forward with flat back.'},
+  {id:'st_p4',label:'Couch stretch 90 sec per side',sub:'After leg days. Back foot elevated on couch. Most important stretch.'},
+  {id:'st_p5',label:'Pigeon pose 60 sec per side',sub:'After leg days. Deep glute and piriformis opener.'},
+];
+const ST_NIGHT=[
+  {id:'st_n1',label:'Figure-4 glute stretch 60 sec per side',sub:'Lying down. Cross ankle over knee, pull toward chest. Deep glute release.'},
+  {id:'st_n2',label:'Supine hamstring stretch 60 sec per side',sub:'Lying, leg straight up, gentle pull. Hold longer than you think.'},
+  {id:'st_n3',label:'Thoracic spine twist 60 sec per side',sub:'Lying, arm extended, rotate upper back. Decompresses middle back.'},
+  {id:'st_n4',label:'Childs pose 90 sec',sub:'Arms extended. Breathe into lower back. Full spine decompression.'},
+  {id:'st_n5',label:'Pec minor stretch doorframe 30 sec per side',sub:'Final posture reset before bed.'},
+];
+const MEALS=[
+  {time:'7:00 AM',name:'Power Breakfast',items:'5 whole eggs scrambled + 1 cup oats with honey + 1 banana + 1 cup whole milk',cal:820,pro:55,carb:90,fat:28,id:'meal1'},
+  {time:'10:30 AM',name:'Mid-Morning Fuel',items:'200g cottage cheese + 1 tbsp honey + fruit + handful of almonds',cal:480,pro:30,carb:45,fat:18,id:'meal2'},
+  {time:'1:00 PM',name:'Lunch',items:'200g chicken breast or salmon + 1.5 cups white rice + bell peppers + half avocado',cal:780,pro:55,carb:85,fat:22,id:'meal3'},
+  {time:'Post-workout',name:'Protein Shake',items:'2 scoops ON whey + 1 cup whole milk + 1 banana + 20g collagen peptides',cal:520,pro:65,carb:50,fat:8,id:'meal4'},
+  {time:'7:00 PM',name:'Dinner',items:'200g salmon or chicken thighs + sweet potato + broccoli + olive oil',cal:720,pro:50,carb:55,fat:28,id:'meal5'},
+  {time:'All day',name:'Hydration',items:'3L water minimum. Skin, joint, and performance depend on it.',cal:0,pro:0,carb:0,fat:0,id:'meal6'},
+];
+const JAW_MEWING=[
+  {id:'jaw_m1',label:'Morning mewing check 8:00 AM',sub:'Full tongue on roof of mouth, back third pressing up, lips sealed, breathe through nose.'},
+  {id:'jaw_m2',label:'Midday mewing check 12:00 PM',sub:'Reset tongue position. Especially after eating.'},
+  {id:'jaw_m3',label:'Evening mewing check 6:00 PM',sub:'Check again. The habit builds unconsciously over months.'},
+];
+const JAW_DAILY=[
+  {id:'jaw_d1',label:'Jaw gum session 20 min',sub:'Falim or mastic gum. Masseter hypertrophy over 3-6 months. Use timer above.'},
+  {id:'jaw_d2',label:'Minoxidil to brows at night',sub:'1-2 drops on each brow with fingertip. Let dry 4 min. Takes 3-4 months.'},
+  {id:'jaw_d3',label:'Neck harness training',sub:'Flexion and extension, 3x15 each. On push days. Neck mass frames the jaw.'},
+];
+
+function loadState(){try{return JSON.parse(localStorage.getItem('ascend_v2')||'{}');}catch(e){return {};}}
+function saveState(){localStorage.setItem('ascend_v2',JSON.stringify(state));}
+let state=loadState();
+let selMoodVal=null,selWeekRatingVal=null;
+let timerSec=20*60,timerRunning=false,timerInt=null;
+let currentDay=new Date().getDay();
+
+function getTodayKey(){return new Date().toISOString().split('T')[0];}
+function getWeekKey(){const d=new Date();d.setDate(d.getDate()-d.getDay());return d.toISOString().split('T')[0];}
+function chkSVG(){return '<svg class="chk-svg" width="12" height="10" viewBox="0 0 12 10"><polyline points="1,5 4.5,8.5 11,1" stroke="#111" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';}
+
+function renderCheckItem(item,section){
+  const key=section+'_'+item.id+'_'+getTodayKey();
+  const checked=state[key]||false;
+  const div=document.createElement('div');
+  div.className='check-item'+(checked?' checked':'');
+  div.innerHTML='<div class="check-box">'+chkSVG()+'</div><div><div class="check-label">'+item.label+'</div>'+(item.sub?'<div class="check-sub">'+item.sub+'</div>':'')+'</div>';
+  div.onclick=()=>{
+    state[key]=!state[key];saveState();
+    div.classList.toggle('checked',state[key]);
+    updateProgress();updateDiagram();
+  };
+  return div;
+}
+
+function renderItems(containerId,items,section){
+  const el=document.getElementById(containerId);
+  if(!el)return;
+  el.innerHTML='';
+  items.forEach(item=>el.appendChild(renderCheckItem(item,section)));
+}
+
+function renderDaySelector(){
+  const c=document.getElementById('daySelector');
+  c.innerHTML='';
+  DAYS.forEach((d,i)=>{
+    const btn=document.createElement('button');
+    const w=WORKOUTS[i]||WORKOUTS[0];
+    btn.className='day-btn'+(i===currentDay?' active':'');
+    btn.textContent=d;
+    btn.onclick=()=>{currentDay=i;renderDaySelector();renderWorkout();};
+    c.appendChild(btn);
+  });
+}
+
+function renderWorkout(){
+  const c=document.getElementById('workoutContent');
+  c.innerHTML='';
+  const workout=WORKOUTS[currentDay]||WORKOUTS[0];
+  if(workout.type==='rest'){
+    const d=document.createElement('div');
+    d.className='info-note';
+    d.innerHTML='Active Recovery Day. 30 min walk, full stretching routine, meal prep, skincare deep clean.';
+    c.appendChild(d);return;
+  }
+  const hdr=document.createElement('div');
+  hdr.innerHTML='<div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">'+DAY_FULL[currentDay]+' &bull; '+workout.muscles.join(', ')+'</div>';
+  c.appendChild(hdr);
+  workout.exercises.forEach((ex,i)=>{
+    const key='workout_ex_d'+currentDay+'_'+i+'_'+getTodayKey();
+    const checked=state[key]||false;
+    const div=document.createElement('div');
+    div.className='workout-item'+(checked?' checked':'');
+    div.dataset.checkKey=key;
+    div.innerHTML='<div class="workout-header"><div class="workout-check">'+chkSVG()+'</div><div class="workout-name">'+ex.name+'</div>'+(ex.tag?'<span class="ex-tag">'+ex.tag+'</span>':'')+'<span class="expand-arrow">&#9660;</span></div>'
+      +'<div class="workout-detail"><table class="ex-table"><tr><th>Sets</th><th>Reps</th><th>Notes</th></tr><tr><td>'+ex.sets+'</td><td>'+ex.reps+'</td><td><div class="ex-note">'+ex.note+'</div></td></tr></table></div>';
+    c.appendChild(div);
+  });
+}
+
+document.addEventListener('click',function(e){
+  const hdr=e.target.closest('.workout-header');
+  if(!hdr)return;
+  const item=hdr.parentElement;
+  const ck=hdr.querySelector('.workout-check');
+  if(e.target===ck||ck.contains(e.target)){
+    e.stopPropagation();
+    const key=item.dataset.checkKey;
+    if(key){state[key]=!state[key];saveState();item.classList.toggle('checked',state[key]);updateProgress();updateDiagram();}
+    return;
+  }
+  item.classList.toggle('open');
+});
+
+function renderMeals(){
+  const c=document.getElementById('mealChecklist');
+  c.innerHTML='';
+  MEALS.forEach(meal=>{
+    const key='diet_'+meal.id+'_'+getTodayKey();
+    const checked=state[key]||false;
+    const card=document.createElement('div');
+    card.className='meal-card';
+    card.innerHTML='<div style="display:flex;align-items:flex-start;gap:10px;cursor:pointer" onclick="toggleMeal(\''+key+'\')"><div class="check-box" style="'+(checked?'background:var(--gold);border-color:var(--gold)':'')+'margin-top:2px">'+(checked?chkSVG():'')+'</div><div style="flex:1"><div class="meal-time">'+meal.time+'</div><div class="meal-name" style="'+(checked?'text-decoration:line-through;color:var(--text-muted)':'')+'">'+meal.name+'</div><div class="meal-items">'+meal.items+'</div>'+(meal.cal>0?'<div class="meal-macros"><div class="meal-macro-item"><div class="meal-macro-num">'+meal.cal+'</div><div class="meal-macro-label">cal</div></div><div class="meal-macro-item"><div class="meal-macro-num">'+meal.pro+'g</div><div class="meal-macro-label">protein</div></div><div class="meal-macro-item"><div class="meal-macro-num">'+meal.carb+'g</div><div class="meal-macro-label">carbs</div></div><div class="meal-macro-item"><div class="meal-macro-num">'+meal.fat+'g</div><div class="meal-macro-label">fat</div></div></div>':'')+'</div></div>';
+    c.appendChild(card);
+  });
+}
+function toggleMeal(key){state[key]=!state[key];saveState();renderMeals();updateProgress();}
+
+function drawMacroWheel(){
+  const canvas=document.getElementById('macroWheel');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const cx=55,cy=55,r=46,lw=12;
+  const data=[{v:760,c:'#c9a84c'},{v:1320,c:'#3dba6a'},{v:1020,c:'#5588cc'}];
+  const total=data.reduce((s,d)=>s+d.v,0);
+  let a=-Math.PI/2;
+  ctx.clearRect(0,0,110,110);
+  ctx.strokeStyle='#1a1a1a';ctx.lineWidth=lw+2;
+  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();
+  data.forEach(d=>{
+    const sw=(d.v/total)*Math.PI*2;
+    ctx.strokeStyle=d.c;ctx.lineWidth=lw;
+    ctx.beginPath();ctx.arc(cx,cy,r,a,a+sw);ctx.stroke();
+    a+=sw;
+  });
+}
+
+// JAW TIMER
+function timerAction(){
+  if(timerRunning){clearInterval(timerInt);timerRunning=false;document.getElementById('timerStartBtn').textContent='Resume';}
+  else{
+    timerRunning=true;document.getElementById('timerStartBtn').textContent='Pause';
+    timerInt=setInterval(()=>{
+      timerSec--;updateTimerDisplay();
+      if(timerSec<=0){clearInterval(timerInt);timerRunning=false;document.getElementById('timerDisplay').textContent='DONE!';document.getElementById('timerStartBtn').textContent='Start';
+        const key='jaw_jaw_d1_'+getTodayKey();state[key]=true;saveState();renderItems('jawDaily',JAW_DAILY,'jaw');updateProgress();}
+    },1000);
+  }
+}
+function timerReset(){clearInterval(timerInt);timerRunning=false;timerSec=20*60;updateTimerDisplay();document.getElementById('timerStartBtn').textContent='Start';}
+function updateTimerDisplay(){const m=Math.floor(timerSec/60).toString().padStart(2,'0');const s=(timerSec%60).toString().padStart(2,'0');document.getElementById('timerDisplay').textContent=m+':'+s;}
+
+function adjCounter(d){const key='counter_chin_'+getTodayKey();state[key]=Math.max(0,(state[key]||0)+d);saveState();document.getElementById('chinTuckCount').textContent=state[key];}
+function resetChin(){const key='counter_chin_'+getTodayKey();state[key]=0;saveState();document.getElementById('chinTuckCount').textContent=0;}
+
+// SLEEP
+function calcSleepHours(){
+  const bed=document.getElementById('bedtimeInput').value;
+  const wake=document.getElementById('wakeInput').value;
+  if(!bed||!wake)return 0;
+  let [bh,bm]=bed.split(':').map(Number);
+  let [wh,wm]=wake.split(':').map(Number);
+  let mins=(wh*60+wm)-(bh*60+bm);
+  if(mins<0)mins+=1440;
+  return mins/60;
+}
+function updateSleepDisplay(){
+  const hrs=calcSleepHours();
+  const el=document.getElementById('sleepHours');
+  const flag=document.getElementById('sleepFlag');
+  el.textContent=hrs.toFixed(1);
+  if(hrs>=8){el.className='sleep-hours-big good-color';flag.textContent='Optimal recovery';}
+  else if(hrs>=7){el.className='sleep-hours-big good-color';flag.textContent='Decent - aim for 8+';}
+  else{el.className='sleep-hours-big bad-color';flag.textContent='UNDER 8 HOURS - skin and muscle recovery impaired';}
+}
+function selMood(v){selMoodVal=v;document.querySelectorAll('#moodRow .mood-btn').forEach((b,i)=>b.classList.toggle('selected',i+1===v));}
+function logSleep(){
+  const hrs=calcSleepHours();
+  const key='sleep_'+getTodayKey();
+  state[key]={bed:document.getElementById('bedtimeInput').value,wake:document.getElementById('wakeInput').value,hrs:hrs.toFixed(1),mood:selMoodVal};
+  saveState();renderSleepHistory();
+  // snapshot daily data for history
+  snapshotDay();
+}
+function renderSleepHistory(){
+  const c=document.getElementById('sleepHistory');
+  c.innerHTML='<div class="section-head" style="margin-top:20px">History</div>';
+  const keys=Object.keys(state).filter(k=>k.startsWith('sleep_')&&k!=='sleep_log').sort().reverse().slice(0,14);
+  keys.forEach(k=>{
+    const e=state[k];if(!e||!e.hrs)return;
+    const date=k.replace('sleep_','');
+    const item=document.createElement('div');
+    item.className='sleep-hist-item';
+    const good=parseFloat(e.hrs)>=8;
+    item.innerHTML='<span style="color:var(--text-muted)">'+date+'</span><span style="color:var(--text-muted);font-size:12px">'+e.bed+' to '+e.wake+'</span><span style="color:'+(good?'var(--green-bright)':'#e05050')+'">'+e.hrs+'h</span>';
+    c.appendChild(item);
+  });
+}
+
+// CHECKIN
+function selWeekRating(v){selWeekRatingVal=v;document.querySelectorAll('#weekRatingRow .mood-btn').forEach((b,i)=>b.classList.toggle('selected',i+1===v));}
+function saveCheckin(){
+  const key='checkin_'+getTodayKey();
+  state[key]={date:getTodayKey(),weight:document.getElementById('checkinWeight').value,rating:selWeekRatingVal,wins:document.getElementById('checkinWins').value,improve:document.getElementById('checkinImprove').value,notes:document.getElementById('checkinNotes').value};
+  saveState();renderCheckinHistory();
+  document.getElementById('checkinWins').value='';document.getElementById('checkinImprove').value='';document.getElementById('checkinNotes').value='';document.getElementById('checkinWeight').value='';
+  snapshotWeek();
+}
+function renderCheckinHistory(){
+  const c=document.getElementById('checkinHistory');
+  c.innerHTML='<div class="section-head" style="margin-top:20px">Journal</div>';
+  const keys=Object.keys(state).filter(k=>k.startsWith('checkin_')).sort().reverse().slice(0,10);
+  keys.forEach(k=>{
+    const e=state[k];if(!e)return;
+    const el=document.createElement('div');el.className='checkin-entry';
+    el.innerHTML='<div class="checkin-entry-date">'+e.date+(e.weight?' &bull; '+e.weight+' lbs':'')+(e.rating?' &bull; Week '+e.rating+'/5':'')+'</div><div class="checkin-entry-body">'+(e.wins?'<strong style="color:var(--gold)">Wins:</strong> '+e.wins+'<br>':'')+(e.improve?'<strong style="color:var(--text)">Improve:</strong> '+e.improve+'<br>':'')+(e.notes||'')+'</div>';
+    c.appendChild(el);
+  });
+}
+
+// PEPTIDES
+function addPeptide(){
+  const name=document.getElementById('peptideName').value.trim();
+  if(!name)return;
+  const id='pep_'+Date.now();
+  state['peptide_def_'+id]={id,name,dose:document.getElementById('peptideDose').value.trim(),time:document.getElementById('peptideTime').value.trim(),note:document.getElementById('peptideNote').value.trim()};
+  saveState();
+  document.getElementById('peptideName').value='';document.getElementById('peptideDose').value='';document.getElementById('peptideTime').value='';document.getElementById('peptideNote').value='';
+  renderPeptides();
+}
+function renderPeptides(){
+  const c=document.getElementById('peptideList');
+  const defs=Object.keys(state).filter(k=>k.startsWith('peptide_def_')).map(k=>state[k]);
+  if(!defs.length){c.innerHTML='<div class="peptide-empty"><div class="peptide-empty-icon">&#9879;&#65039;</div><div class="peptide-empty-text">No peptides added yet.</div></div>';return;}
+  c.innerHTML='';
+  defs.forEach(p=>{
+    const item={id:p.id,label:p.name+(p.dose?' - '+p.dose:''),sub:(p.time||'')+(p.note?' &bull; '+p.note:'')};
+    const el=renderCheckItem(item,'peptide');
+    const del=document.createElement('button');del.className='del-btn';del.textContent='x';
+    del.onclick=(e)=>{e.stopPropagation();delete state['peptide_def_'+p.id];saveState();renderPeptides();};
+    el.appendChild(del);c.appendChild(el);
+  });
+}
+
+// CUSTOM TASKS
+function addCustomTask(section){
+  const input=document.getElementById(section+'CustomInput');
+  const val=input.value.trim();if(!val)return;
+  const id='ct_'+Date.now();
+  state['cdef_'+section+'_'+id]={id,label:val};
+  saveState();input.value='';renderCustomTasks(section);updateProgress();
+}
+function renderCustomTasks(section){
+  const c=document.getElementById(section+'CustomTasks');if(!c)return;
+  const defs=Object.keys(state).filter(k=>k.startsWith('cdef_'+section+'_')).map(k=>state[k]);
+  c.innerHTML='';
+  defs.forEach(d=>{
+    const el=renderCheckItem({id:d.id,label:d.label},'custom_'+section);
+    const del=document.createElement('button');del.className='del-btn';del.textContent='x';
+    del.onclick=(e)=>{e.stopPropagation();delete state['cdef_'+section+'_'+d.id];saveState();renderCustomTasks(section);updateProgress();};
+    el.appendChild(del);c.appendChild(el);
+  });
+}
+
+// PROGRESS
+function countItems(){
+  const today=getTodayKey();
+  const all=[
+    ...SK_MORNING.map(i=>'skincare_'+i.id+'_'+today),
+    ...SK_NIGHT.map(i=>'skincare_'+i.id+'_'+today),
+    ...SU_MORNING.map(i=>'supplements_'+i.id+'_'+today),
+    ...SU_POST.map(i=>'supplements_'+i.id+'_'+today),
+    ...SU_NIGHT.map(i=>'supplements_'+i.id+'_'+today),
+    ...PO_MORNING.map(i=>'posture_'+i.id+'_'+today),
+    ...JAW_MEWING.map(i=>'jaw_'+i.id+'_'+today),
+    ...JAW_DAILY.map(i=>'jaw_'+i.id+'_'+today),
+    ...MEALS.map(i=>'diet_'+i.id+'_'+today),
+  ];
+  const done=all.filter(k=>state[k]).length;
+  return{total:all.length,done};
+}
+function updateProgress(){
+  const {total,done}=countItems();
+  const pct=total>0?Math.round((done/total)*100):0;
+  document.getElementById('progressBar').style.width=pct+'%';
+  document.getElementById('progressPct').textContent=pct+'% complete';
+  if(pct>=80){state['daycomplete_'+getTodayKey()]=true;saveState();}
+  updateStreak();
+}
+function updateStreak(){
+  let streak=0;const now=new Date();
+  for(let i=0;i<365;i++){const d=new Date(now);d.setDate(now.getDate()-i);if(state['daycomplete_'+d.toISOString().split('T')[0]])streak++;else break;}
+  document.getElementById('streakCount').textContent=streak;
+  document.getElementById('heroStreak').textContent=streak;
+  let weekDays=0;for(let i=0;i<7;i++){const d=new Date(now);d.setDate(now.getDate()-now.getDay()+i);if(state['daycomplete_'+d.toISOString().split('T')[0]])weekDays++;}
+  document.getElementById('weekDays').textContent=weekDays+'/7';
+}
+
+// BODY DIAGRAM — lights up immediately when exercise checked
+function getTrainedMuscles(){
+  const trained=new Set();
+  for(let di=0;di<7;di++){
+    const d=new Date();d.setDate(d.getDate()-d.getDay()+di);
+    const dk=d.toISOString().split('T')[0];
+    const workout=WORKOUTS[di]||WORKOUTS[0];
+    if(!workout.exercises)continue;
+    workout.exercises.forEach((ex,ei)=>{
+      const key='workout_ex_d'+di+'_'+ei+'_'+dk;
+      if(state[key]){
+        const muscles=EX_MUSCLES[ex.name]||[];
+        muscles.forEach(m=>trained.add(m));
+      }
+    });
+  }
+  return trained;
+}
+function updateDiagram(){
+  const trained=getTrainedMuscles();
+  const allKeys=['chest','shoulders','back','lats','arms','triceps','legs','hamstrings','glutes','abs'];
+  const allTrained=allKeys.every(m=>trained.has(m));
+  const gold='#c9a84c',goldBright='#e8b84b',dim='#191919',dimStroke='#232323';
+  Object.keys(MUSCLE_IDS).forEach(muscle=>{
+    const isTrained=trained.has(muscle);
+    MUSCLE_IDS[muscle].forEach(id=>{
+      const el=document.getElementById(id);if(!el)return;
+      el.setAttribute('fill',isTrained?(allTrained?goldBright:gold):dim);
+      el.setAttribute('stroke',isTrained?(allTrained?goldBright:'#7a5010'):dimStroke);
+      if(allTrained)el.classList.add('week-glow');
+      else el.classList.remove('week-glow');
+    });
+  });
+  document.querySelectorAll('.muscle-pill').forEach(pill=>{
+    pill.classList.toggle('active',trained.has(pill.dataset.muscle));
+  });
+  document.getElementById('weekBanner').classList.toggle('show',allTrained);
+}
+
+// HISTORY TAB
+function snapshotDay(){
+  const today=getTodayKey();
+  const snapshot=state['snap_day_'+today]||{};
+  snapshot.date=today;
+  snapshot.sleepHrs=state['sleep_'+today]?.hrs||null;
+  snapshot.mood=state['sleep_'+today]?.mood||null;
+  const {done,total}=countItems();
+  snapshot.pct=total>0?Math.round((done/total)*100):0;
+  state['snap_day_'+today]=snapshot;
+  saveState();
+}
+function snapshotWeek(){
+  const wk=getWeekKey();
+  const snap={weekStart:wk};
+  // collect all checked items this week
+  const checkedItems=[];
+  for(let di=0;di<7;di++){
+    const d=new Date();d.setDate(d.getDate()-d.getDay()+di);
+    const dk=d.toISOString().split('T')[0];
+    const workout=WORKOUTS[di]||WORKOUTS[0];
+    if(workout.exercises){
+      workout.exercises.forEach((ex,ei)=>{
+        if(state['workout_ex_d'+di+'_'+ei+'_'+dk])checkedItems.push(ex.name+' ('+DAYS[di]+')');
+      });
+    }
+  }
+  snap.workouts=checkedItems;
+  const checkin=state['checkin_'+getTodayKey()];
+  if(checkin){snap.weight=checkin.weight;snap.rating=checkin.rating;snap.wins=checkin.wins;snap.improve=checkin.improve;}
+  snap.streak=parseInt(document.getElementById('heroStreak').textContent)||0;
+  snap.trainedMuscles=[...getTrainedMuscles()];
+  state['snap_week_'+wk]=snap;
+  saveState();
+  renderHistory();
+}
+function renderHistory(){
+  const c=document.getElementById('historyContent');c.innerHTML='';
+  const weeks=Object.keys(state).filter(k=>k.startsWith('snap_week_')).sort().reverse();
+  if(!weeks.length){
+    c.innerHTML='<div class="info-note">No history yet. Complete your first week and save a Sunday check-in to start building your record.</div>';
+    return;
+  }
+  weeks.forEach(wk=>{
+    const snap=state[wk];if(!snap)return;
+    const allMuscles=['chest','shoulders','back','arms','triceps','legs','hamstrings','glutes','abs'];
+    const pct=snap.trainedMuscles?Math.round((snap.trainedMuscles.filter(m=>allMuscles.includes(m)).length/allMuscles.length)*100):0;
+    const div=document.createElement('div');div.className='hist-week';
+    div.innerHTML='<div class="hist-week-header" onclick="this.parentElement.classList.toggle(\'open\')">'
+      +'<div class="hist-week-title">Week of '+snap.weekStart+'</div>'
+      +'<div class="hist-week-meta">'+(snap.weight?snap.weight+' lbs &bull; ':'')+pct+'% muscles hit'+(snap.rating?' &bull; '+snap.rating+'/5':'')+'</div>'
+      +'</div>'
+      +'<div class="hist-week-body">'
+      +(snap.wins||snap.improve?'<div class="hist-cat"><div class="hist-cat-title">Check-in</div>'+(snap.wins?'<div class="hist-item-done">Wins: '+snap.wins+'</div>':'')+(snap.improve?'<div class="hist-item-done">Improve: '+snap.improve+'</div>':'')+'</div>':'')
+      +(snap.trainedMuscles&&snap.trainedMuscles.length?'<div class="hist-cat"><div class="hist-cat-title">Muscles Trained</div><div style="font-size:13px;color:var(--gold)">'+snap.trainedMuscles.join(', ')+'</div></div>':'')
+      +(snap.workouts&&snap.workouts.length?'<div class="hist-cat"><div class="hist-cat-title">Exercises Completed</div>'+snap.workouts.map(w=>'<div class="hist-item-done">'+w+'</div>').join('')+'</div>':'')
+      +'</div>';
+    c.appendChild(div);
+  });
+}
+
+function showTab(name,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(name==='diet')setTimeout(drawMacroWheel,50);
+  if(name==='history')renderHistory();
+}
+
+function init(){
+  document.getElementById('todayDate').textContent=new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+  currentDay=new Date().getDay();
+  renderDaySelector();renderWorkout();
+  renderItems('skincareMorning',SK_MORNING,'skincare');
+  renderItems('skincareNight',SK_NIGHT,'skincare');
+  renderItems('skincareWeekly',SK_WEEKLY,'skincare');
+  renderItems('suppMorning',SU_MORNING,'supplements');
+  renderItems('suppPostWorkout',SU_POST,'supplements');
+  renderItems('suppNight',SU_NIGHT,'supplements');
+  renderItems('postureMorning',PO_MORNING,'posture');
+  renderItems('postureMidday',PO_MIDDAY,'posture');
+  renderItems('postureEvening',PO_EVENING,'posture');
+  renderItems('stretchMorning',ST_MORNING,'stretching');
+  renderItems('stretchPostWorkout',ST_POST,'stretching');
+  renderItems('stretchNight',ST_NIGHT,'stretching');
+  renderMeals();
+  renderItems('jawMewing',JAW_MEWING,'jaw');
+  renderItems('jawDaily',JAW_DAILY,'jaw');
+  renderPeptides();
+  ['workout','skincare','supplements','posture','stretching','diet','jaw'].forEach(s=>renderCustomTasks(s));
+  document.getElementById('bedtimeInput').addEventListener('input',updateSleepDisplay);
+  document.getElementById('wakeInput').addEventListener('input',updateSleepDisplay);
+  updateSleepDisplay();renderSleepHistory();renderCheckinHistory();
+  document.getElementById('chinTuckCount').textContent=state['counter_chin_'+getTodayKey()]||0;
+  updateProgress();updateDiagram();
+  setTimeout(drawMacroWheel,100);
+}
+init();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
